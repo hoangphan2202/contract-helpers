@@ -23,7 +23,6 @@ class UiIncentiveDataProvider {
         this._context = context;
         this._chainlinkFeedsRegistries = {};
         this._contract = UiIncentiveDataProviderFactory_1.UiIncentiveDataProviderFactory.connect(context.incentiveDataProviderAddress, context.provider);
-        this.chainId = context.chainId;
     }
     /**
      *  Get the full reserve incentive data for the lending pool and the user
@@ -50,7 +49,6 @@ class UiIncentiveDataProvider {
     async getReservesIncentivesDataHumanized(lendingPoolAddressProvider) {
         const response = await this.getReservesIncentivesData(lendingPoolAddressProvider);
         return response.map(r => ({
-            id: `${this.chainId}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
             underlyingAsset: r.underlyingAsset.toLowerCase(),
             aIncentiveData: this._formatIncentiveData(r.aIncentiveData),
             vIncentiveData: this._formatIncentiveData(r.vIncentiveData),
@@ -60,7 +58,6 @@ class UiIncentiveDataProvider {
     async getUserReservesIncentivesDataHumanized(user, lendingPoolAddressProvider) {
         const response = await this.getUserReservesIncentivesData(user, lendingPoolAddressProvider);
         return response.map(r => ({
-            id: `${this.chainId}-${user}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
             underlyingAsset: r.underlyingAsset.toLowerCase(),
             aTokenIncentivesUserData: this._formatUserIncentiveData(r.aTokenIncentivesUserData),
             vTokenIncentivesUserData: this._formatUserIncentiveData(r.vTokenIncentivesUserData),

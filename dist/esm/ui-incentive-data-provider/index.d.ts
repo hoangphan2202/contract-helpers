@@ -14,7 +14,6 @@ export interface UiIncentiveDataProviderInterface {
 export interface UiIncentiveDataProviderContext {
     incentiveDataProviderAddress: string;
     provider: providers.Provider;
-    chainId: number;
 }
 export interface FeedResultSuccessful {
     rewardTokenAddress: string;
@@ -31,7 +30,6 @@ export declare class UiIncentiveDataProvider implements UiIncentiveDataProviderI
     readonly _contract: UiIncentiveDataProviderContract;
     private readonly _chainlinkFeedsRegistries;
     private readonly _context;
-    private readonly chainId;
     /**
      * Constructor
      * @param context The ui incentive data provider context

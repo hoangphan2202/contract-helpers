@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.amountGtThan0OrMinus1 = exports.amount0OrPositiveValidator = exports.amountGtThan0Validator = exports.isEthAddressOrEnsValidator = exports.isEthAddressArrayValidatorNotEmpty = exports.isEthAddressArrayValidator = exports.isEthAddressValidator = exports.isDeadline32BytesValidator = void 0;
+exports.amountGtThan0OrMinus1 = exports.amount0OrPositiveValidator = exports.amountGtThan0Validator = exports.isEthAddressOrEnsValidator = exports.isEthAddressArrayValidatorNotEmpty = exports.isEthAddressArrayValidator = exports.isEthAddressValidator = void 0;
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -30,28 +30,6 @@ const paramValidators_1 = require("./paramValidators");
 //   }
 //   return isParamOptional;
 // }
-function isDeadline32BytesValidator(target, propertyName, methodArguments, isParamOptional) {
-    const addressParameters = Reflect.getOwnMetadata(paramValidators_1.isPermitDeadline32Bytes, target, propertyName);
-    if (addressParameters) {
-        addressParameters.forEach(storedParams => {
-            if (storedParams.field) {
-                if (methodArguments[0][storedParams.field] &&
-                    Buffer.byteLength(methodArguments[0][storedParams.field], 'utf8') > 32) {
-                    throw new Error(`Deadline: ${methodArguments[0][storedParams.field]} is bigger than 32 bytes`);
-                }
-            }
-            else {
-                const isOptional = isParamOptional === null || isParamOptional === void 0 ? void 0 : isParamOptional[storedParams.index];
-                if (methodArguments[storedParams.index] &&
-                    !isOptional &&
-                    Buffer.byteLength(methodArguments[storedParams.index], 'utf8') > 32) {
-                    throw new Error(`Deadline: ${methodArguments[storedParams.index]} is bigger than 32 bytes`);
-                }
-            }
-        });
-    }
-}
-exports.isDeadline32BytesValidator = isDeadline32BytesValidator;
 function isEthAddressValidator(target, propertyName, methodArguments, isParamOptional) {
     const addressParameters = Reflect.getOwnMetadata(paramValidators_1.isEthAddressMetadataKey, target, propertyName);
     if (addressParameters) {

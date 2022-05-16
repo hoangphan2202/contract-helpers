@@ -1,25 +1,19 @@
 import { providers } from 'ethers';
-import { ReservesHelperInput, UserReservesHelperInput } from '../index';
 import { ReservesData, UserReserveData, ReservesDataHumanized, UserReserveDataHumanized } from './types';
 export * from './types';
 export interface UiPoolDataProviderContext {
     uiPoolDataProviderAddress: string;
     provider: providers.Provider;
-    chainId: number;
 }
 export interface UiPoolDataProviderInterface {
-    getReservesList: (args: ReservesHelperInput) => Promise<string[]>;
-    getReservesData: (args: ReservesHelperInput) => Promise<ReservesData>;
-    getUserReservesData: (args: UserReservesHelperInput) => Promise<UserReserveData>;
-    getReservesHumanized: (args: ReservesHelperInput) => Promise<ReservesDataHumanized>;
-    getUserReservesHumanized: (args: UserReservesHelperInput) => Promise<{
-        userReserves: UserReserveDataHumanized[];
-        userEmodeCategoryId: number;
-    }>;
+    getReservesList: (lendingPoolAddressProvider: string) => Promise<string[]>;
+    getReservesData: (lendingPoolAddressProvider: string) => Promise<ReservesData>;
+    getUserReservesData: (lendingPoolAddressProvider: string, user: string) => Promise<UserReserveData>;
+    getReservesHumanized: (lendingPoolAddressProvider: string) => Promise<ReservesDataHumanized>;
+    getUserReservesHumanized: (lendingPoolAddressProvider: string, user: string) => Promise<UserReserveDataHumanized[]>;
 }
 export declare class UiPoolDataProvider implements UiPoolDataProviderInterface {
     private readonly _contract;
-    private readonly chainId;
     /**
      * Constructor
      * @param context The ui pool data provider context
@@ -28,19 +22,16 @@ export declare class UiPoolDataProvider implements UiPoolDataProviderInterface {
     /**
      * Get the underlying asset address for each lending pool reserve
      */
-    getReservesList({ lendingPoolAddressProvider, }: ReservesHelperInput): Promise<string[]>;
+    getReservesList(lendingPoolAddressProvider: string): Promise<string[]>;
     /**
      * Get data for each lending pool reserve
      */
-    getReservesData({ lendingPoolAddressProvider, }: ReservesHelperInput): Promise<ReservesData>;
+    getReservesData(lendingPoolAddressProvider: string): Promise<ReservesData>;
     /**
      * Get data for each user reserve on the lending pool
      */
-    getUserReservesData({ lendingPoolAddressProvider, user, }: UserReservesHelperInput): Promise<UserReserveData>;
-    getReservesHumanized({ lendingPoolAddressProvider, }: ReservesHelperInput): Promise<ReservesDataHumanized>;
-    getUserReservesHumanized({ lendingPoolAddressProvider, user, }: UserReservesHelperInput): Promise<{
-        userReserves: UserReserveDataHumanized[];
-        userEmodeCategoryId: number;
-    }>;
+    getUserReservesData(lendingPoolAddressProvider: string, user: string): Promise<UserReserveData>;
+    getReservesHumanized(lendingPoolAddressProvider: string): Promise<ReservesDataHumanized>;
+    getUserReservesHumanized(lendingPoolAddressProvider: string, user: string): Promise<UserReserveDataHumanized[]>;
 }
 //# sourceMappingURL=index.d.ts.map

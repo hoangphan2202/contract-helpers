@@ -10,7 +10,6 @@ describe('UiPoolDataProvider', () => {
         const instance = new index_1.UiPoolDataProvider({
             uiPoolDataProviderAddress: mockValidEthereumAddress,
             provider: new ethers_1.providers.JsonRpcProvider(),
-            chainId: 137,
         });
         const mockGetReservesData = jest.fn();
         const mockGetUserReservesData = jest.fn();
@@ -29,14 +28,12 @@ describe('UiPoolDataProvider', () => {
             expect(() => new index_1.UiPoolDataProvider({
                 uiPoolDataProviderAddress: mockInvalidEthereumAddress,
                 provider: new ethers_1.providers.JsonRpcProvider(),
-                chainId: 137,
             })).toThrowError('contract address is not valid');
         });
         it('should work if all info is correct', () => {
             const instance = new index_1.UiPoolDataProvider({
                 uiPoolDataProviderAddress: mockValidEthereumAddress,
                 provider: new ethers_1.providers.JsonRpcProvider(),
-                chainId: 137,
             });
             expect(instance instanceof index_1.UiPoolDataProvider).toEqual(true);
         });
@@ -44,70 +41,49 @@ describe('UiPoolDataProvider', () => {
     describe('getReservesList - to get 100% in coverage :( pointless test', () => {
         it('should not throw', async () => {
             const instance = createValidInstance();
-            await expect(instance.getReservesList({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-            })).resolves.not.toThrow();
+            await expect(instance.getReservesList(mockValidEthereumAddress)).resolves.not.toThrow();
         });
         it('should throw when lendingPoolAddressProvider is not valid address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getReservesList({
-                lendingPoolAddressProvider: mockInvalidEthereumAddress,
-            })).rejects.toThrow('Lending pool address is not valid');
+            await expect(instance.getReservesList(mockInvalidEthereumAddress)).rejects.toThrow('Lending pool address is not valid');
         });
     });
     describe('getReservesData', () => {
         it('should throw when lendingPoolAddressProvider is not valid address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getReservesData({
-                lendingPoolAddressProvider: mockInvalidEthereumAddress,
-            })).rejects.toThrow('Lending pool address is not valid');
+            await expect(instance.getReservesData(mockInvalidEthereumAddress)).rejects.toThrow('Lending pool address is not valid');
         });
         it('should not throw', async () => {
             const instance = createValidInstance();
-            await expect(instance.getReservesData({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-            })).resolves.not.toThrow();
+            await expect(instance.getReservesData(mockValidEthereumAddress)).resolves.not.toThrow();
         });
     });
     describe('getUserReservesData', () => {
         it('should throw when lendingPoolAddressProvider is not valid address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getUserReservesData({
-                lendingPoolAddressProvider: mockInvalidEthereumAddress,
-                user: mockValidEthereumAddress,
-            })).rejects.toThrow('Lending pool address is not valid');
+            await expect(instance.getUserReservesData(mockInvalidEthereumAddress, mockValidEthereumAddress)).rejects.toThrow('Lending pool address is not valid');
         });
         it('should throw if user is not a valid ethereum address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getUserReservesData({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-                user: mockInvalidEthereumAddress,
-            })).rejects.toThrow('User address is not a valid ethereum address');
+            await expect(instance.getUserReservesData(mockValidEthereumAddress, mockInvalidEthereumAddress)).rejects.toThrow('User address is not a valid ethereum address');
         });
         it('should not throw if user is a valid ethereum address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getUserReservesData({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-                user: mockValidEthereumAddress,
-            })).resolves.not.toThrow();
+            await expect(instance.getUserReservesData(mockValidEthereumAddress, mockValidEthereumAddress)).resolves.not.toThrow();
         });
     });
     describe('getReservesHumanized', () => {
         it('should throw if lendingPoolAddressProvider is not a valid ethereum address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getReservesHumanized({
-                lendingPoolAddressProvider: mockInvalidEthereumAddress,
-            })).rejects.toThrow('Lending pool address is not valid');
+            await expect(instance.getReservesHumanized(mockInvalidEthereumAddress)).rejects.toThrow('Lending pool address is not valid');
         });
         it('should not throw', async () => {
             const instance = createValidInstance();
-            const result = await instance.getReservesHumanized({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-            });
+            const result = await instance.getReservesHumanized(mockValidEthereumAddress);
             expect(result).toEqual({
                 reservesData: [
                     {
-                        id: '137-0x3e0437898a5667a4769b1ca5a34aab1ae7e81377-0x88757f2f99175387ab4c6a4b3067c77a695b0349',
+                        id: '0x3e0437898a5667a4769b1ca5a34aab1ae7e813770x88757f2f99175387ab4c6a4b3067c77a695b0349',
                         underlyingAsset: '0x3e0437898a5667a4769b1ca5a34aab1ae7e81377',
                         name: '',
                         symbol: 'AMPL',
@@ -138,14 +114,10 @@ describe('UiPoolDataProvider', () => {
                         stableDebtLastUpdateTimestamp: 0,
                         totalScaledVariableDebt: '0',
                         priceInMarketReferenceCurrency: '0',
-                        priceOracle: '0x796ec26fc7df8D81BCB5BABF74ccdE0E2B122164',
                         variableRateSlope1: '0',
                         variableRateSlope2: '0',
                         stableRateSlope1: '0',
                         stableRateSlope2: '0',
-                        baseStableBorrowRate: '0',
-                        baseVariableBorrowRate: '0',
-                        optimalUsageRatio: '0',
                         // new
                         debtCeiling: '0',
                         eModeCategoryId: 1,
@@ -156,14 +128,9 @@ describe('UiPoolDataProvider', () => {
                         eModeLiquidationBonus: 1,
                         eModePriceSource: '0x3E0437898a5667a4769B1Ca5A34aAB1ae7E81377',
                         eModeLabel: 'test label',
-                        accruedToTreasury: '0',
-                        unbacked: '0',
-                        isolationModeTotalDebt: '0',
-                        debtCeilingDecimals: 0,
-                        borrowableInIsolation: false,
                     },
                     {
-                        id: '137-0xa478c2975ab1ea89e8196811f51a7b7ade33eb11-0x88757f2f99175387ab4c6a4b3067c77a695b0349',
+                        id: '0xa478c2975ab1ea89e8196811f51a7b7ade33eb110x88757f2f99175387ab4c6a4b3067c77a695b0349',
                         underlyingAsset: '0xa478c2975ab1ea89e8196811f51a7b7ade33eb11',
                         name: '',
                         symbol: 'UNIDAIWETH',
@@ -194,14 +161,10 @@ describe('UiPoolDataProvider', () => {
                         stableDebtLastUpdateTimestamp: 0,
                         totalScaledVariableDebt: '0',
                         priceInMarketReferenceCurrency: '0',
-                        priceOracle: '0x796ec26fc7df8D81BCB5BABF74ccdE0E2B122164',
                         variableRateSlope1: '0',
                         variableRateSlope2: '0',
                         stableRateSlope1: '0',
                         stableRateSlope2: '0',
-                        baseStableBorrowRate: '0',
-                        baseVariableBorrowRate: '0',
-                        optimalUsageRatio: '0',
                         // new
                         debtCeiling: '0',
                         eModeCategoryId: 1,
@@ -212,11 +175,6 @@ describe('UiPoolDataProvider', () => {
                         eModeLiquidationBonus: 1,
                         eModePriceSource: '0x3E0437898a5667a4769B1Ca5A34aAB1ae7E81377',
                         eModeLabel: 'test label',
-                        accruedToTreasury: '0',
-                        unbacked: '0',
-                        isolationModeTotalDebt: '0',
-                        debtCeilingDecimals: 0,
-                        borrowableInIsolation: false,
                     },
                 ],
                 baseCurrencyData: {
@@ -231,39 +189,27 @@ describe('UiPoolDataProvider', () => {
     describe('getUserReservesHumanized', () => {
         it('should throw if lendingPoolAddressProvider is not a valid ethereum address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getUserReservesHumanized({
-                lendingPoolAddressProvider: mockInvalidEthereumAddress,
-                user: mockValidEthereumAddress,
-            })).rejects.toThrow('Lending pool address is not valid');
+            await expect(instance.getUserReservesHumanized(mockInvalidEthereumAddress, mockValidEthereumAddress)).rejects.toThrow('Lending pool address is not valid');
         });
         it('should throw if user is not a valid ethereum address', async () => {
             const instance = createValidInstance();
-            await expect(instance.getUserReservesHumanized({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-                user: mockInvalidEthereumAddress,
-            })).rejects.toThrow('User address is not a valid ethereum address');
+            await expect(instance.getUserReservesHumanized(mockValidEthereumAddress, mockInvalidEthereumAddress)).rejects.toThrow('User address is not a valid ethereum address');
         });
         it('should be ok', async () => {
             const instance = createValidInstance();
-            const result = await instance.getUserReservesHumanized({
-                lendingPoolAddressProvider: mockValidEthereumAddress,
-                user: mockValidEthereumAddress,
-            });
-            expect(result).toEqual({
-                userReserves: [
-                    {
-                        id: '137-0x88757f2f99175387ab4c6a4b3067c77a695b0349-0xb597cd8d3217ea6477232f9217fa70837ff667af-0x88757f2f99175387ab4c6a4b3067c77a695b0349',
-                        principalStableDebt: '0',
-                        scaledATokenBalance: '0',
-                        scaledVariableDebt: '0',
-                        stableBorrowLastUpdateTimestamp: 0,
-                        stableBorrowRate: '0',
-                        underlyingAsset: '0xb597cd8d3217ea6477232f9217fa70837ff667af',
-                        usageAsCollateralEnabledOnUser: false,
-                    },
-                ],
-                userEmodeCategoryId: 1,
-            });
+            const result = await instance.getUserReservesHumanized(mockValidEthereumAddress, mockValidEthereumAddress);
+            expect(result).toEqual([
+                {
+                    principalStableDebt: '0',
+                    scaledATokenBalance: '0',
+                    scaledVariableDebt: '0',
+                    stableBorrowLastUpdateTimestamp: 0,
+                    stableBorrowRate: '0',
+                    underlyingAsset: '0xb597cd8d3217ea6477232f9217fa70837ff667af',
+                    usageAsCollateralEnabledOnUser: false,
+                    userEmodeCategoryId: 1,
+                },
+            ]);
         });
     });
 });

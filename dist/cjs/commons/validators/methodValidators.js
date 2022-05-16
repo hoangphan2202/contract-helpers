@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StackeUiDataProviderValidator = exports.GovDelegationValidator = exports.GovValidator = exports.GovHelperValidator = exports.WETHValidator = exports.FaucetValidator = exports.SignStakingValidator = exports.StakingValidator = exports.RepayWithCollateralValidator = exports.LiquiditySwapValidator = exports.ERC20Validator = exports.SynthetixValidator = exports.DebtTokenValidator = exports.IncentivesValidator = exports.UiIncentiveDataProviderValidator = exports.LPValidatorV3 = exports.L2PValidator = exports.LPValidator = exports.LPSwapCollateralValidatorV3 = exports.LPRepayWithCollateralValidatorV3 = exports.LPSwapCollateralValidator = exports.LPRepayWithCollateralValidator = exports.LPFlashLiquidationValidatorV3 = exports.LPFlashLiquidationValidator = void 0;
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
+exports.GovDelegationValidator = exports.GovValidator = exports.GovHelperValidator = exports.WETHValidator = exports.FaucetValidator = exports.SignStakingValidator = exports.StakingValidator = exports.RepayWithCollateralValidator = exports.LiquiditySwapValidator = exports.ERC20Validator = exports.SynthetixValidator = exports.DebtTokenValidator = exports.IncentivesValidator = exports.LPValidatorV3 = exports.LPValidator = exports.LPSwapCollateralValidatorV3 = exports.LPRepayWithCollateralValidatorV3 = exports.LPSwapCollateralValidator = exports.LPRepayWithCollateralValidator = exports.LPFlashLiquidationValidatorV3 = exports.LPFlashLiquidationValidator = void 0;
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -129,25 +128,6 @@ function LPValidator(target, propertyName, descriptor) {
     };
 }
 exports.LPValidator = LPValidator;
-function L2PValidator(target, propertyName, descriptor) {
-    const method = descriptor.value;
-    descriptor.value = function () {
-        if (
-        // @ts-expect-error todo: check why this ignore is needed
-        !ethers_1.utils.isAddress(this.l2PoolAddress) ||
-            // @ts-expect-error todo: check why this ignore is needed
-            !ethers_1.utils.isAddress(this.encoderAddress)) {
-            console.error(
-            // @ts-expect-error todo: check why this ignore is needed
-            `[L2PoolValidator] You need to pass valid addresses: l2pool: ${this.l2PoolAddress} encoder: ${this.encoderAddress}`);
-            return [];
-        }
-        // isEthAddressValidator(target, propertyName, arguments);
-        (0, validations_1.isDeadline32BytesValidator)(target, propertyName, arguments);
-        return method.apply(this, arguments);
-    };
-}
-exports.L2PValidator = L2PValidator;
 function LPValidatorV3(target, propertyName, descriptor) {
     const method = descriptor.value;
     descriptor.value = function () {
@@ -164,19 +144,6 @@ function LPValidatorV3(target, propertyName, descriptor) {
     };
 }
 exports.LPValidatorV3 = LPValidatorV3;
-function UiIncentiveDataProviderValidator(target, propertyName, descriptor) {
-    const method = descriptor.value;
-    descriptor.value = function () {
-        // @ts-expect-error todo: check why this ignore is needed
-        if (!ethers_1.utils.isAddress(this.uiIncentiveDataProviderAddress)) {
-            console.error(`[UiIncentiveDataProviderValidator] You need to pass valid addresses`);
-            throw new Error('UiIncentiveDataProviderAddress must be an eth valid address');
-        }
-        (0, validations_1.isEthAddressValidator)(target, propertyName, arguments);
-        return method.apply(this, arguments);
-    };
-}
-exports.UiIncentiveDataProviderValidator = UiIncentiveDataProviderValidator;
 // export function LTAMigratorValidator(
 //   target: any,
 //   propertyName: string,
@@ -371,12 +338,4 @@ function GovDelegationValidator(target, propertyName, descriptor) {
     };
 }
 exports.GovDelegationValidator = GovDelegationValidator;
-function StackeUiDataProviderValidator(target, propertyName, descriptor) {
-    const method = descriptor.value;
-    descriptor.value = function () {
-        (0, validations_1.isEthAddressValidator)(target, propertyName, arguments);
-        return method.apply(this, arguments);
-    };
-}
-exports.StackeUiDataProviderValidator = StackeUiDataProviderValidator;
 //# sourceMappingURL=methodValidators.js.map

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ethers_1 = require("ethers");
 const types_1 = require("../commons/types");
 const utils_1 = require("../commons/utils");
-const index_1 = require("./index");
+const index_1 = require("../index");
 jest.mock('../commons/gasStation', () => {
     return {
         __esModule: true,

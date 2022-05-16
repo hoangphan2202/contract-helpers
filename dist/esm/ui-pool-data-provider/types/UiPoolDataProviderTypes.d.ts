@@ -142,7 +142,6 @@ export interface ReservesDataHumanized {
     baseCurrencyData: PoolBaseCurrencyHumanized;
 }
 export interface UserReserveDataHumanized {
-    id: string;
     underlyingAsset: string;
     scaledATokenBalance: string;
     usageAsCollateralEnabledOnUser: boolean;

@@ -4,7 +4,6 @@ export * from './types/UiPoolDataProviderTypes';
 export interface UiPoolDataProviderContext {
     uiPoolDataProviderAddress: string;
     provider: providers.Provider;
-    chainId: number;
 }
 export interface UiPoolDataProviderInterface {
     getReservesList: (lendingPoolAddressProvider: string) => Promise<string[]>;
@@ -15,7 +14,6 @@ export interface UiPoolDataProviderInterface {
 }
 export declare class UiPoolDataProvider implements UiPoolDataProviderInterface {
     private readonly _contract;
-    private readonly chainId;
     /**
      * Constructor
      * @param context The ui pool data provider context

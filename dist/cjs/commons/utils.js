@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.augustusToAmountOffsetFromCalldata = exports.mintAmountsPerToken = exports.gasLimitRecommendations = exports.SURPLUS = exports.uniswapEthAmount = exports.API_ETH_MOCK_ADDRESS = exports.SUPER_BIG_ALLOWANCE_NUMBER = exports.MAX_UINT_AMOUNT = exports.DEFAULT_APPROVE_AMOUNT = exports.DEFAULT_NULL_VALUE_ON_TX = exports.getTxValue = exports.decimalsToCurrencyUnits = exports.canBeEnsAddress = exports.valueToWei = void 0;
+exports.mintAmountsPerToken = exports.gasLimitRecommendations = exports.SURPLUS = exports.uniswapEthAmount = exports.API_ETH_MOCK_ADDRESS = exports.SUPER_BIG_ALLOWANCE_NUMBER = exports.MAX_UINT_AMOUNT = exports.DEFAULT_APPROVE_AMOUNT = exports.DEFAULT_NULL_VALUE_ON_TX = exports.getTxValue = exports.decimalsToCurrencyUnits = exports.canBeEnsAddress = exports.valueToWei = void 0;
 const bignumber_js_1 = require("bignumber.js");
 const ethers_1 = require("ethers");
 const types_1 = require("./types");
@@ -32,10 +32,6 @@ exports.gasLimitRecommendations = {
     [types_1.ProtocolAction.default]: {
         limit: '210000',
         recommended: '210000',
-    },
-    [types_1.ProtocolAction.supply]: {
-        limit: '300000',
-        recommended: '300000',
     },
     [types_1.ProtocolAction.deposit]: {
         limit: '300000',
@@ -106,28 +102,5 @@ exports.mintAmountsPerToken = {
     UNILENDETH: (0, exports.valueToWei)(exports.uniswapEthAmount, 18),
     UNILINKETH: (0, exports.valueToWei)(exports.uniswapEthAmount, 18),
     UNIMKRETH: (0, exports.valueToWei)(exports.uniswapEthAmount, 18),
-    EURS: (0, exports.valueToWei)('10000', 2),
-    AGEUR: (0, exports.valueToWei)('10000', 18),
-    BAL: (0, exports.valueToWei)('10000', 18),
-    CRV: (0, exports.valueToWei)('10000', 18),
-    DPI: (0, exports.valueToWei)('10000', 18),
-    GHST: (0, exports.valueToWei)('10000', 18),
-    JEUR: (0, exports.valueToWei)('10000', 18),
-    SUSHI: (0, exports.valueToWei)('10000', 18),
 };
-const augustusToAmountOffsetFromCalldata = (calldata) => {
-    switch (calldata.slice(0, 10)) {
-        case '0x935fb84b': // Augustus V5 buyOnUniswap
-            return 36; // 4 + 1 * 32
-        case '0xc03786b0': // Augustus V5 buyOnUniswapFork
-            return 100; // 4 + 3 * 32
-        case '0xb2f1e6db': // Augustus V5 buyOnUniswapV2Fork
-            return 68; // 4 + 2 * 32
-        case '0xb66bcbac': // Augustus V5 buy
-            return 164; // 4 + 5 * 32
-        default:
-            throw new Error('Unrecognized function selector for Augustus');
-    }
-};
-exports.augustusToAmountOffsetFromCalldata = augustusToAmountOffsetFromCalldata;
 //# sourceMappingURL=utils.js.map

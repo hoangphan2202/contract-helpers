@@ -43,26 +43,5 @@ describe('Utils', () => {
             expect(value).toEqual('123123541');
         });
     });
-    describe('augustusToAmountOffsetFromCalldata', () => {
-        it('Expects 36', () => {
-            const offset = (0, utils_1.augustusToAmountOffsetFromCalldata)('0x935fb84b');
-            expect(offset).toEqual(36);
-        });
-        it('Expects 100', () => {
-            const offset = (0, utils_1.augustusToAmountOffsetFromCalldata)('0xc03786b0');
-            expect(offset).toEqual(100);
-        });
-        it('Expects 68', () => {
-            const offset = (0, utils_1.augustusToAmountOffsetFromCalldata)('0xb2f1e6db');
-            expect(offset).toEqual(68);
-        });
-        it('Expects 164', () => {
-            const offset = (0, utils_1.augustusToAmountOffsetFromCalldata)('0xb66bcbac');
-            expect(offset).toEqual(164);
-        });
-        it('Expects Error', () => {
-            expect(() => (0, utils_1.augustusToAmountOffsetFromCalldata)('asdf')).toThrowError(`Unrecognized function selector for Augustus`);
-        });
-    });
 });
 //# sourceMappingURL=utils.test.js.map

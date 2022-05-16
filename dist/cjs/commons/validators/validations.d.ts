@@ -1,4 +1,3 @@
-export declare function isDeadline32BytesValidator(target: any, propertyName: string, methodArguments: any, isParamOptional?: boolean[]): void;
 export declare function isEthAddressValidator(target: any, propertyName: string, methodArguments: any, isParamOptional?: boolean[]): void;
 export declare function isEthAddressArrayValidator(target: any, propertyName: string, methodArguments: any, isParamOptional?: boolean[]): void;
 export declare function isEthAddressArrayValidatorNotEmpty(target: any, propertyName: string, methodArguments: any, isParamOptional?: boolean[]): void;

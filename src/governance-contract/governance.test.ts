@@ -226,7 +226,7 @@ describe('GovernanceService', () => {
         withDelegatecalls: proposalMock.withDelegatecalls,
         startBlock: Number(proposalMock.startBlock.toString()),
         endBlock: Number(proposalMock.endBlock.toString()),
-        executionTime: Number(proposalMock.executionTime.toString()),
+        executionTime: proposalMock.executionTime.toString(),
         forVotes: proposalMock.forVotes.toString(),
         againstVotes: proposalMock.againstVotes.toString(),
         executed: proposalMock.executed,
@@ -236,9 +236,8 @@ describe('GovernanceService', () => {
         state: Object.values(ProposalState)[proposalMock.proposalState],
         minimumQuorum: proposalMock.minimumQuorum.toString(),
         minimumDiff: proposalMock.minimumDiff.toString(),
-        executionTimeWithGracePeriod: Number(
+        executionTimeWithGracePeriod:
           proposalMock.executionTimeWithGracePeriod.toString(),
-        ),
         proposalCreated: Number(proposalMock.proposalCreated.toString()),
         totalVotingSupply: proposalMock.totalVotingSupply.toString(),
       });
@@ -275,7 +274,7 @@ describe('GovernanceService', () => {
         withDelegatecalls: proposalMock.withDelegatecalls,
         startBlock: Number(proposalMock.startBlock.toString()),
         endBlock: Number(proposalMock.endBlock.toString()),
-        executionTime: Number(proposalMock.executionTime.toString()),
+        executionTime: proposalMock.executionTime.toString(),
         forVotes: proposalMock.forVotes.toString(),
         againstVotes: proposalMock.againstVotes.toString(),
         executed: proposalMock.executed,
@@ -285,9 +284,8 @@ describe('GovernanceService', () => {
         state: Object.values(ProposalState)[proposalMock.proposalState],
         minimumQuorum: proposalMock.minimumQuorum.toString(),
         minimumDiff: proposalMock.minimumDiff.toString(),
-        executionTimeWithGracePeriod: Number(
+        executionTimeWithGracePeriod:
           proposalMock.executionTimeWithGracePeriod.toString(),
-        ),
         proposalCreated: Number(proposalMock.proposalCreated.toString()),
         totalVotingSupply: proposalMock.totalVotingSupply.toString(),
       });

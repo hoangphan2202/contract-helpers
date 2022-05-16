@@ -11,8 +11,6 @@ export declare const ChainIdToNetwork: Record<number, string>;
 export declare enum ChainId {
     mainnet = 1,
     ropsten = 3,
-    rinkeby = 4,
-    goerli = 5,
     kovan = 42,
     xdai = 100,
     polygon = 137,
@@ -20,13 +18,7 @@ export declare enum ChainId {
     avalanche = 43114,
     fuji = 43113,
     arbitrum_one = 42161,
-    arbitrum_rinkeby = 421611,
-    fantom = 250,
-    fantom_testnet = 4002,
-    optimism = 10,
-    optimism_kovan = 69,
-    harmony = 1666600000,
-    harmony_testnet = 1666700000
+    arbitrum_rinkeby = 421611
 }
 export declare type ConstantAddressesByNetwork = Record<string, {
     SYNTHETIX_PROXY_ADDRESS?: tEthereumAddress;
@@ -54,7 +46,6 @@ export declare enum eEthereumTxType {
 }
 export declare enum ProtocolAction {
     default = "default",
-    supply = "supply",
     withdraw = "withdraw",
     deposit = "deposit",
     liquidationCall = "liquidationCall",

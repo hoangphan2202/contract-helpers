@@ -54,7 +54,7 @@ describe('BaseService', () => {
         const from = '0x0000000000000000000000000000000000000001';
         const value = '1';
         const gasSurplus = 10;
-        const action = ProtocolAction.supply;
+        const action = ProtocolAction.deposit;
         const rawTxMethod = async () => ({});
         it('Expects a tx object with specified value', async () => {
             const txCallback = baseService.generateTxCallback({
@@ -92,7 +92,7 @@ describe('BaseService', () => {
     });
     describe('generateTxPriceEstimation', () => {
         const baseService = new BaseService(provider, Test__factory);
-        const action = ProtocolAction.supply;
+        const action = ProtocolAction.deposit;
         const txCallback = async () => ({
             gasLimit: BigNumber.from(1),
             gasPrice: BigNumber.from(2),
@@ -169,7 +169,7 @@ describe('BaseService', () => {
             expect(gas === null || gas === void 0 ? void 0 : gas.gasLimit).toEqual('1');
             expect(gas === null || gas === void 0 ? void 0 : gas.gasPrice).toEqual('2');
         });
-        xit('Expects null when no gas limit', async () => {
+        it('Expects null when no gas limit', async () => {
             const txCallback = async () => ({});
             const txs = [
                 {
@@ -181,18 +181,6 @@ describe('BaseService', () => {
             const gasObj = baseService.generateTxPriceEstimation(txs, txCallback, action);
             const gas = await gasObj();
             expect(gas).toEqual(null);
-        });
-        it('Expects to fail when no gas limit', async () => {
-            const txCallback = async () => ({});
-            const txs = [
-                {
-                    txType: eEthereumTxType.DLP_ACTION,
-                    tx: txCallback,
-                    gas: async () => Promise.reject(new Error('Some error')),
-                },
-            ];
-            const gasObj = baseService.generateTxPriceEstimation(txs, txCallback, action);
-            await expect(async () => gasObj()).rejects.toThrowError('Transaction calculation error');
         });
     });
 });

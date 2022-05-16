@@ -10,7 +10,6 @@ describe('UiPoolDataProvider', () => {
         const instance = new index_1.UiPoolDataProvider({
             uiPoolDataProviderAddress: mockValidEthereumAddress,
             provider: new ethers_1.providers.JsonRpcProvider(),
-            chainId: 137,
         });
         const mockGetReservesData = jest.fn();
         const mockGetUserReservesData = jest.fn();
@@ -29,14 +28,12 @@ describe('UiPoolDataProvider', () => {
             expect(() => new index_1.UiPoolDataProvider({
                 uiPoolDataProviderAddress: mockInvalidEthereumAddress,
                 provider: new ethers_1.providers.JsonRpcProvider(),
-                chainId: 137,
             })).toThrowError('contract address is not valid');
         });
         it('should work if all info is correct', () => {
             const instance = new index_1.UiPoolDataProvider({
                 uiPoolDataProviderAddress: mockValidEthereumAddress,
                 provider: new ethers_1.providers.JsonRpcProvider(),
-                chainId: 137,
             });
             expect(instance instanceof index_1.UiPoolDataProvider).toEqual(true);
         });
@@ -86,7 +83,7 @@ describe('UiPoolDataProvider', () => {
             expect(result).toEqual({
                 reservesData: [
                     {
-                        id: '137-0x3e0437898a5667a4769b1ca5a34aab1ae7e81377-0x88757f2f99175387ab4c6a4b3067c77a695b0349',
+                        id: '0x3e0437898a5667a4769b1ca5a34aab1ae7e813770x88757f2f99175387ab4c6a4b3067c77a695b0349',
                         underlyingAsset: '0x3e0437898a5667a4769b1ca5a34aab1ae7e81377',
                         name: '',
                         symbol: 'AMPL',
@@ -122,7 +119,7 @@ describe('UiPoolDataProvider', () => {
                         stableRateSlope2: '0',
                     },
                     {
-                        id: '137-0xa478c2975ab1ea89e8196811f51a7b7ade33eb11-0x88757f2f99175387ab4c6a4b3067c77a695b0349',
+                        id: '0xa478c2975ab1ea89e8196811f51a7b7ade33eb110x88757f2f99175387ab4c6a4b3067c77a695b0349',
                         underlyingAsset: '0xa478c2975ab1ea89e8196811f51a7b7ade33eb11',
                         name: '',
                         symbol: 'UNIDAIWETH',
@@ -181,7 +178,6 @@ describe('UiPoolDataProvider', () => {
             const result = await instance.getUserReservesHumanized(mockValidEthereumAddress, mockValidEthereumAddress);
             expect(result).toEqual([
                 {
-                    id: '137-0x88757f2f99175387ab4c6a4b3067c77a695b0349-0xb597cd8d3217ea6477232f9217fa70837ff667af-0x88757f2f99175387ab4c6a4b3067c77a695b0349',
                     principalStableDebt: '0',
                     scaledATokenBalance: '0',
                     scaledVariableDebt: '0',

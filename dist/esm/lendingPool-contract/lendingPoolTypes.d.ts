@@ -97,20 +97,4 @@ export declare type LPFlashLiquidation = {
     initiator: tEthereumAddress;
     useEthPath?: boolean;
 };
-export declare type LPParaswapRepayWithCollateral = {
-    user: tEthereumAddress;
-    fromAsset: tEthereumAddress;
-    fromAToken: tEthereumAddress;
-    assetToRepay: tEthereumAddress;
-    repayWithAmount: string;
-    repayAmount: string;
-    permitSignature?: PermitSignature;
-    repayAllDebt?: boolean;
-    rateMode: InterestRate;
-    onBehalfOf?: tEthereumAddress;
-    referralCode?: string;
-    flash?: boolean;
-    swapAndRepayCallData: BytesLike;
-    augustus: tEthereumAddress;
-};
 //# sourceMappingURL=lendingPoolTypes.d.ts.map

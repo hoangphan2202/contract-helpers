@@ -12,5 +12,4 @@ export declare const uniswapEthAmount = "0.1";
 export declare const SURPLUS = "0.05";
 export declare const gasLimitRecommendations: GasRecommendationType;
 export declare const mintAmountsPerToken: Record<string, string>;
-export declare const augustusToAmountOffsetFromCalldata: (calldata: string) => number;
 //# sourceMappingURL=utils.d.ts.map

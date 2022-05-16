@@ -1,7 +1,7 @@
 import { BigNumber, constants, providers, utils } from 'ethers';
 import { eEthereumTxType, } from '../commons/types';
 import { DEFAULT_NULL_VALUE_ON_TX } from '../commons/utils';
-import { IncentivesController } from './index';
+import { IncentivesController } from '../index';
 jest.mock('../commons/gasStation', () => {
     return {
         __esModule: true,

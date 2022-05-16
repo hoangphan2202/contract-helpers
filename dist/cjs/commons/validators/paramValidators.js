@@ -1,11 +1,10 @@
 "use strict";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isPositiveOrMinusOneAmount = exports.is0OrPositiveAmount = exports.isPositiveAmount = exports.isEthAddressOrENS = exports.isEthAddressArray = exports.isEthAddress = exports.isDeadline32Bytes = exports.isEthAddressArrayMetadataKeyNotEmpty = exports.optionalMetadataKey = exports.is0OrPositiveMetadataKey = exports.isPositiveOrMinusOneMetadataKey = exports.isPositiveMetadataKey = exports.isEthAddressOrENSMetadataKey = exports.isEthAddressArrayMetadataKey = exports.isPermitDeadline32Bytes = exports.isEthAddressMetadataKey = void 0;
+exports.isPositiveOrMinusOneAmount = exports.is0OrPositiveAmount = exports.isPositiveAmount = exports.isEthAddressOrENS = exports.isEthAddressArray = exports.isEthAddress = exports.isEthAddressArrayMetadataKeyNotEmpty = exports.optionalMetadataKey = exports.is0OrPositiveMetadataKey = exports.isPositiveOrMinusOneMetadataKey = exports.isPositiveMetadataKey = exports.isEthAddressOrENSMetadataKey = exports.isEthAddressArrayMetadataKey = exports.isEthAddressMetadataKey = void 0;
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 require("reflect-metadata");
 exports.isEthAddressMetadataKey = Symbol('ethAddress');
-exports.isPermitDeadline32Bytes = Symbol('deadline32Bytes');
 exports.isEthAddressArrayMetadataKey = Symbol('ethAddressArray');
 exports.isEthAddressOrENSMetadataKey = Symbol('ethOrENSAddress');
 exports.isPositiveMetadataKey = Symbol('isPositive');
@@ -13,18 +12,6 @@ exports.isPositiveOrMinusOneMetadataKey = Symbol('isPositiveOrMinusOne');
 exports.is0OrPositiveMetadataKey = Symbol('is0OrPositiveMetadataKey');
 exports.optionalMetadataKey = Symbol('Optional');
 exports.isEthAddressArrayMetadataKeyNotEmpty = Symbol('isEthAddressArrayMetadataKeyNotEmpty');
-function isDeadline32Bytes(field) {
-    return function (target, propertyKey, parameterIndex) {
-        const existingPossibleAddresses = Reflect.getOwnMetadata(exports.isPermitDeadline32Bytes, target, propertyKey) ||
-            [];
-        existingPossibleAddresses.push({
-            index: parameterIndex,
-            field,
-        });
-        Reflect.defineMetadata(exports.isPermitDeadline32Bytes, existingPossibleAddresses, target, propertyKey);
-    };
-}
-exports.isDeadline32Bytes = isDeadline32Bytes;
 function isEthAddress(field) {
     return function (target, propertyKey, parameterIndex) {
         const existingPossibleAddresses = Reflect.getOwnMetadata(exports.isEthAddressMetadataKey, target, propertyKey) ||

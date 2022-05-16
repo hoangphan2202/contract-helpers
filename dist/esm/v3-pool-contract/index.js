@@ -1,20 +1,16 @@
 import { __decorate, __metadata, __param } from "tslib";
-import { splitSignature } from '@ethersproject/bytes';
 import { constants, utils } from 'ethers';
 import BaseService from '../commons/BaseService';
 import { eEthereumTxType, InterestRate, ProtocolAction, } from '../commons/types';
-import { API_ETH_MOCK_ADDRESS, augustusToAmountOffsetFromCalldata, DEFAULT_APPROVE_AMOUNT, getTxValue, SURPLUS, valueToWei, } from '../commons/utils';
+import { API_ETH_MOCK_ADDRESS, DEFAULT_APPROVE_AMOUNT, getTxValue, SURPLUS, valueToWei, } from '../commons/utils';
 import { LPFlashLiquidationValidatorV3, LPRepayWithCollateralValidatorV3, LPSwapCollateralValidatorV3, LPValidatorV3, } from '../commons/validators/methodValidators';
 import { is0OrPositiveAmount, isEthAddress, isPositiveAmount, isPositiveOrMinusOneAmount, } from '../commons/validators/paramValidators';
-import { ERC20_2612Service } from '../erc20-2612';
 import { ERC20Service } from '../erc20-contract';
 import { augustusFromAmountOffsetFromCalldata, LiquiditySwapAdapterService, } from '../paraswap-liquiditySwapAdapter-contract';
-import { ParaswapRepayWithCollateral, } from '../paraswap-repayWithCollateralAdapter-contract';
 import { RepayWithCollateralAdapterService, } from '../repayWithCollateralAdapter-contract';
 import { SynthetixService } from '../synthetix-contract';
-import { L2Pool } from '../v3-pool-rollups';
 import { WETHGatewayService, } from '../wethgateway-contract';
-import { IPool__factory } from './typechain/IPool__factory';
+import { IPoolFactory } from './typechain/IPoolFactory';
 const buildParaSwapLiquiditySwapParams = (assetToSwapTo, minAmountToReceive, swapAllBalanceOffset, swapCalldata, augustus, permitAmount, deadline, v, r, s) => {
     return utils.defaultAbiCoder.encode([
         'address',
@@ -34,27 +30,19 @@ const buildParaSwapLiquiditySwapParams = (assetToSwapTo, minAmountToReceive, swa
 };
 export class Pool extends BaseService {
     constructor(provider, lendingPoolConfig) {
-        super(provider, IPool__factory);
-        const { POOL, FLASH_LIQUIDATION_ADAPTER, REPAY_WITH_COLLATERAL_ADAPTER, SWAP_COLLATERAL_ADAPTER, WETH_GATEWAY, L2_ENCODER, } = lendingPoolConfig !== null && lendingPoolConfig !== void 0 ? lendingPoolConfig : {};
+        super(provider, IPoolFactory);
+        const { POOL, FLASH_LIQUIDATION_ADAPTER, REPAY_WITH_COLLATERAL_ADAPTER, SWAP_COLLATERAL_ADAPTER, WETH_GATEWAY, } = lendingPoolConfig !== null && lendingPoolConfig !== void 0 ? lendingPoolConfig : {};
         this.poolAddress = POOL !== null && POOL !== void 0 ? POOL : '';
         this.flashLiquidationAddress = FLASH_LIQUIDATION_ADAPTER !== null && FLASH_LIQUIDATION_ADAPTER !== void 0 ? FLASH_LIQUIDATION_ADAPTER : '';
         this.swapCollateralAddress = SWAP_COLLATERAL_ADAPTER !== null && SWAP_COLLATERAL_ADAPTER !== void 0 ? SWAP_COLLATERAL_ADAPTER : '';
         this.repayWithCollateralAddress = REPAY_WITH_COLLATERAL_ADAPTER !== null && REPAY_WITH_COLLATERAL_ADAPTER !== void 0 ? REPAY_WITH_COLLATERAL_ADAPTER : '';
-        this.l2EncoderAddress = L2_ENCODER !== null && L2_ENCODER !== void 0 ? L2_ENCODER : '';
         // initialize services
-        this.erc20_2612Service = new ERC20_2612Service(provider);
         this.erc20Service = new ERC20Service(provider);
         this.synthetixService = new SynthetixService(provider);
         this.wethGatewayService = new WETHGatewayService(provider, this.erc20Service, WETH_GATEWAY);
         this.liquiditySwapAdapterService = new LiquiditySwapAdapterService(provider, SWAP_COLLATERAL_ADAPTER);
         this.repayWithCollateralAdapterService =
             new RepayWithCollateralAdapterService(provider, REPAY_WITH_COLLATERAL_ADAPTER);
-        this.paraswapRepayWithCollateralAdapterService =
-            new ParaswapRepayWithCollateral(provider, REPAY_WITH_COLLATERAL_ADAPTER);
-        this.l2PoolService = new L2Pool(provider, {
-            l2PoolAddress: this.poolAddress,
-            encoderAddress: this.l2EncoderAddress,
-        });
     }
     async deposit({ user, reserve, amount, onBehalfOf, referralCode }) {
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
@@ -102,11 +90,11 @@ export class Pool extends BaseService {
         txs.push({
             tx: txCallback,
             txType: eEthereumTxType.DLP_ACTION,
-            gas: this.generateTxPriceEstimation(txs, txCallback, ProtocolAction.supply),
+            gas: this.generateTxPriceEstimation(txs, txCallback, ProtocolAction.deposit),
         });
         return txs;
     }
-    async supply({ user, reserve, amount, onBehalfOf, referralCode, useOptimizedPath, }) {
+    async supply({ user, reserve, amount, onBehalfOf, referralCode }) {
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
             return this.wethGatewayService.depositETH({
                 lendingPool: this.poolAddress,
@@ -144,46 +132,25 @@ export class Pool extends BaseService {
             txs.push(approveTx);
         }
         const lendingPoolContract = this.getContractInstance(this.poolAddress);
-        // use optimized path
-        if (useOptimizedPath) {
-            return this.l2PoolService.supply({ user, reserve, amount: convertedAmount, referralCode }, txs);
-        }
         const txCallback = this.generateTxCallback({
-            rawTxMethod: async () => lendingPoolContract.populateTransaction.supply(reserve, convertedAmount, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, referralCode !== null && referralCode !== void 0 ? referralCode : '0'),
+            rawTxMethod: async () => lendingPoolContract.populateTransaction.deposit(reserve, convertedAmount, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, referralCode !== null && referralCode !== void 0 ? referralCode : '0'),
             from: user,
             value: getTxValue(reserve, convertedAmount),
         });
         txs.push({
             tx: txCallback,
             txType: eEthereumTxType.DLP_ACTION,
-            gas: this.generateTxPriceEstimation(txs, txCallback, ProtocolAction.supply),
+            gas: this.generateTxPriceEstimation(txs, txCallback, ProtocolAction.deposit),
         });
         return txs;
     }
     // Sign permit supply
-    async signERC20Approval({ user, reserve, amount, deadline }) {
-        const { getTokenData, isApproved } = this.erc20Service;
+    async signERC20Approval({ user, reserve, amount }) {
+        const { getTokenData } = this.erc20Service;
         const { name, decimals } = await getTokenData(reserve);
-        const convertedAmount = amount === '-1'
-            ? constants.MaxUint256.toString()
-            : valueToWei(amount, decimals);
-        const approved = await isApproved({
-            token: reserve,
-            user,
-            spender: this.poolAddress,
-            amount,
-        });
-        if (approved) {
-            return '';
-        }
+        const convertedAmount = valueToWei(amount, decimals);
         const { chainId } = await this.provider.getNetwork();
-        const nonce = await this.erc20_2612Service.getNonce({
-            token: reserve,
-            owner: user,
-        });
-        if (nonce === null) {
-            return '';
-        }
+        const nonce = await this.provider.getTransactionCount(user);
         const typeData = {
             types: {
                 EIP712Domain: [
@@ -212,19 +179,18 @@ export class Pool extends BaseService {
                 spender: this.poolAddress,
                 value: convertedAmount,
                 nonce,
-                deadline,
+                deadline: constants.MaxUint256.toString(),
             },
         };
         return JSON.stringify(typeData);
     }
-    async supplyWithPermit({ user, reserve, onBehalfOf, amount, referralCode, signature, useOptimizedPath, deadline, }) {
+    async supplyWithPermit({ user, reserve, onBehalfOf, amount, referralCode, signature, }) {
         const txs = [];
         const { decimalsOf } = this.erc20Service;
         const poolContract = this.getContractInstance(this.poolAddress);
         const stakedTokenDecimals = await decimalsOf(reserve);
         const convertedAmount = valueToWei(amount, stakedTokenDecimals);
-        // const sig: Signature = utils.splitSignature(signature);
-        const sig = splitSignature(signature);
+        const sig = utils.splitSignature(signature);
         const fundsAvailable = await this.synthetixService.synthetixValidation({
             user,
             reserve,
@@ -233,30 +199,18 @@ export class Pool extends BaseService {
         if (!fundsAvailable) {
             throw new Error('Not enough funds to execute operation');
         }
-        if (useOptimizedPath) {
-            return this.l2PoolService.supplyWithPermit({
-                user,
-                reserve,
-                amount: convertedAmount,
-                referralCode,
-                deadline,
-                permitV: sig.v,
-                permitR: sig.r,
-                permitS: sig.s,
-            }, txs);
-        }
         const txCallback = this.generateTxCallback({
-            rawTxMethod: async () => poolContract.populateTransaction.supplyWithPermit(reserve, convertedAmount, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, referralCode !== null && referralCode !== void 0 ? referralCode : 0, deadline, sig.v, sig.r, sig.s),
+            rawTxMethod: async () => poolContract.populateTransaction.supplyWithPermit(reserve, convertedAmount, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, referralCode !== null && referralCode !== void 0 ? referralCode : 0, constants.MaxUint256.toString(), sig.v, sig.r, sig.s),
             from: user,
         });
         txs.push({
             tx: txCallback,
             txType: eEthereumTxType.DLP_ACTION,
-            gas: this.generateTxPriceEstimation(txs, txCallback),
+            gas: this.generateTxPriceEstimation(txs, txCallback, ProtocolAction.deposit),
         });
         return txs;
     }
-    async withdraw({ user, reserve, amount, onBehalfOf, aTokenAddress, useOptimizedPath, }) {
+    async withdraw({ user, reserve, amount, onBehalfOf, aTokenAddress }) {
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
             if (!aTokenAddress) {
                 throw new Error('To withdraw ETH you need to pass the aWETH token address');
@@ -274,13 +228,6 @@ export class Pool extends BaseService {
         const convertedAmount = amount === '-1'
             ? constants.MaxUint256.toString()
             : valueToWei(amount, decimals);
-        if (useOptimizedPath) {
-            return this.l2PoolService.withdraw({
-                user,
-                reserve,
-                amount: convertedAmount,
-            });
-        }
         const poolContract = this.getContractInstance(this.poolAddress);
         const txCallback = this.generateTxCallback({
             rawTxMethod: async () => poolContract.populateTransaction.withdraw(reserve, convertedAmount, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user),
@@ -295,7 +242,7 @@ export class Pool extends BaseService {
             },
         ];
     }
-    async borrow({ user, reserve, amount, interestRateMode, debtTokenAddress, onBehalfOf, referralCode, useOptimizedPath, }) {
+    async borrow({ user, reserve, amount, interestRateMode, debtTokenAddress, onBehalfOf, referralCode, }) {
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
             if (!debtTokenAddress) {
                 throw new Error(`To borrow ETH you need to pass the stable or variable WETH debt Token Address corresponding the interestRateMode`);
@@ -313,15 +260,6 @@ export class Pool extends BaseService {
         const reserveDecimals = await decimalsOf(reserve);
         const formatAmount = valueToWei(amount, reserveDecimals);
         const numericRateMode = interestRateMode === InterestRate.Variable ? 2 : 1;
-        if (useOptimizedPath) {
-            return this.l2PoolService.borrow({
-                user,
-                reserve,
-                amount: formatAmount,
-                numericRateMode,
-                referralCode,
-            });
-        }
         const poolContract = this.getContractInstance(this.poolAddress);
         const txCallback = this.generateTxCallback({
             rawTxMethod: async () => poolContract.populateTransaction.borrow(reserve, formatAmount, numericRateMode, referralCode !== null && referralCode !== void 0 ? referralCode : 0, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user),
@@ -335,7 +273,7 @@ export class Pool extends BaseService {
             },
         ];
     }
-    async repay({ user, reserve, amount, interestRateMode, onBehalfOf, useOptimizedPath, }) {
+    async repay({ user, reserve, amount, interestRateMode, onBehalfOf }) {
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
             return this.wethGatewayService.repayETH({
                 lendingPool: this.poolAddress,
@@ -379,14 +317,6 @@ export class Pool extends BaseService {
             });
             txs.push(approveTx);
         }
-        if (useOptimizedPath) {
-            return this.l2PoolService.repay({
-                user,
-                reserve,
-                amount: convertedAmount,
-                numericRateMode,
-            }, txs);
-        }
         const txCallback = this.generateTxCallback({
             rawTxMethod: async () => populateTransaction.repay(reserve, convertedAmount, numericRateMode, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user),
             from: user,
@@ -399,7 +329,7 @@ export class Pool extends BaseService {
         });
         return txs;
     }
-    async repayWithPermit({ user, reserve, amount, interestRateMode, onBehalfOf, signature, useOptimizedPath, deadline, }) {
+    async repayWithPermit({ user, reserve, amount, interestRateMode, onBehalfOf, signature, }) {
         const txs = [];
         const { decimalsOf } = this.erc20Service;
         const poolContract = this.getContractInstance(this.poolAddress);
@@ -420,20 +350,8 @@ export class Pool extends BaseService {
                 throw new Error('Not enough funds to execute operation');
             }
         }
-        if (useOptimizedPath) {
-            return this.l2PoolService.repayWithPermit({
-                user,
-                reserve,
-                amount: convertedAmount,
-                numericRateMode,
-                deadline,
-                permitR: sig.r,
-                permitS: sig.s,
-                permitV: sig.v,
-            }, txs);
-        }
         const txCallback = this.generateTxCallback({
-            rawTxMethod: async () => populateTransaction.repayWithPermit(reserve, convertedAmount, numericRateMode, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, deadline, sig.v, sig.r, sig.s),
+            rawTxMethod: async () => populateTransaction.repayWithPermit(reserve, convertedAmount, numericRateMode, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, constants.MaxUint256.toString(), sig.v, sig.r, sig.s),
             from: user,
             value: getTxValue(reserve, convertedAmount),
         });
@@ -444,15 +362,8 @@ export class Pool extends BaseService {
         });
         return txs;
     }
-    async swapBorrowRateMode({ user, reserve, interestRateMode, useOptimizedPath }) {
+    swapBorrowRateMode({ user, reserve, interestRateMode }) {
         const numericRateMode = interestRateMode === InterestRate.Variable ? 2 : 1;
-        if (useOptimizedPath) {
-            return this.l2PoolService.swapBorrowRateMode({
-                user,
-                reserve,
-                numericRateMode,
-            });
-        }
         const poolContract = this.getContractInstance(this.poolAddress);
         const txCallback = this.generateTxCallback({
             rawTxMethod: async () => poolContract.populateTransaction.swapBorrowRateMode(reserve, numericRateMode),
@@ -466,15 +377,8 @@ export class Pool extends BaseService {
             },
         ];
     }
-    async setUsageAsCollateral({ user, reserve, usageAsCollateral, useOptimizedPath, }) {
+    setUsageAsCollateral({ user, reserve, usageAsCollateral }) {
         const poolContract = this.getContractInstance(this.poolAddress);
-        if (useOptimizedPath) {
-            return this.l2PoolService.setUserUseReserveAsCollateral({
-                user,
-                reserve,
-                usageAsCollateral,
-            });
-        }
         const txCallback = this.generateTxCallback({
             rawTxMethod: async () => poolContract.populateTransaction.setUserUseReserveAsCollateral(reserve, usageAsCollateral),
             from: user,
@@ -487,7 +391,7 @@ export class Pool extends BaseService {
             },
         ];
     }
-    async liquidationCall({ liquidator, liquidatedUser, debtReserve, collateralReserve, purchaseAmount, getAToken, liquidateAll, useOptimizedPath, }) {
+    async liquidationCall({ liquidator, liquidatedUser, debtReserve, collateralReserve, purchaseAmount, getAToken, liquidateAll, }) {
         const txs = [];
         const { isApproved, approve, decimalsOf } = this.erc20Service;
         const approved = await isApproved({
@@ -509,16 +413,6 @@ export class Pool extends BaseService {
         if (!liquidateAll) {
             const reserveDecimals = await decimalsOf(debtReserve);
             convertedAmount = valueToWei(purchaseAmount, reserveDecimals);
-        }
-        if (useOptimizedPath) {
-            return this.l2PoolService.liquidationCall({
-                liquidator,
-                liquidatedUser,
-                debtReserve,
-                collateralReserve,
-                debtToCover: convertedAmount,
-                getAToken,
-            }, txs);
         }
         const poolContract = this.getContractInstance(this.poolAddress);
         const txCallback = this.generateTxCallback({
@@ -677,95 +571,6 @@ export class Pool extends BaseService {
         txs.push(swapAndRepayTx);
         return txs;
     }
-    async paraswapRepayWithCollateral({ user, fromAsset, fromAToken, assetToRepay, repayWithAmount, repayAmount, permitSignature, repayAllDebt, rateMode, onBehalfOf, referralCode, flash, swapAndRepayCallData, augustus, }) {
-        const txs = [];
-        const permitParams = permitSignature !== null && permitSignature !== void 0 ? permitSignature : {
-            amount: '0',
-            deadline: '0',
-            v: 0,
-            r: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            s: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        };
-        const approved = await this.erc20Service.isApproved({
-            token: fromAToken,
-            user,
-            spender: this.repayWithCollateralAddress,
-            amount: repayWithAmount,
-        });
-        if (!approved) {
-            const approveTx = this.erc20Service.approve({
-                user,
-                token: fromAToken,
-                spender: this.repayWithCollateralAddress,
-                amount: constants.MaxUint256.toString(),
-            });
-            txs.push(approveTx);
-        }
-        const fromDecimals = await this.erc20Service.decimalsOf(fromAsset);
-        const convertedRepayWithAmount = valueToWei(repayWithAmount, fromDecimals);
-        const repayWithAmountWithSurplus = (Number(repayWithAmount) +
-            (Number(repayWithAmount) * Number(SURPLUS)) / 100).toString();
-        const convertedRepayWithAmountWithSurplus = valueToWei(repayWithAmountWithSurplus, fromDecimals);
-        const decimals = await this.erc20Service.decimalsOf(assetToRepay);
-        const convertedRepayAmount = valueToWei(repayAmount, decimals);
-        const numericInterestRate = rateMode === InterestRate.Stable ? 1 : 2;
-        if (flash) {
-            const callDataEncoded = utils.defaultAbiCoder.encode(['bytes', 'address'], [swapAndRepayCallData, augustus]);
-            const params = utils.defaultAbiCoder.encode([
-                'address',
-                'uint256',
-                'uint256',
-                'uint256',
-                'bytes',
-                'uint256',
-                'uint256',
-                'uint8',
-                'bytes32',
-                'bytes32',
-            ], [
-                assetToRepay,
-                convertedRepayAmount,
-                repayAllDebt
-                    ? augustusToAmountOffsetFromCalldata(swapAndRepayCallData)
-                    : 0,
-                numericInterestRate,
-                callDataEncoded,
-                permitParams.amount,
-                permitParams.deadline,
-                permitParams.v,
-                permitParams.r,
-                permitParams.s,
-            ]);
-            const poolContract = this.getContractInstance(this.poolAddress);
-            const txCallback = this.generateTxCallback({
-                rawTxMethod: async () => poolContract.populateTransaction.flashLoan(this.repayWithCollateralAddress, [fromAsset], repayAllDebt
-                    ? [convertedRepayWithAmountWithSurplus]
-                    : [convertedRepayWithAmount], [0], // interest rate mode to NONE for flashloan to not open debt
-                onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user, params, referralCode !== null && referralCode !== void 0 ? referralCode : '0'),
-                from: user,
-            });
-            txs.push({
-                tx: txCallback,
-                txType: eEthereumTxType.DLP_ACTION,
-                gas: this.generateTxPriceEstimation(txs, txCallback, ProtocolAction.repayCollateral),
-            });
-            return txs;
-        }
-        const swapAndRepayTx = this.paraswapRepayWithCollateralAdapterService.swapAndRepay({
-            user,
-            collateralAsset: fromAsset,
-            debtAsset: assetToRepay,
-            collateralAmount: convertedRepayWithAmount,
-            debtRepayAmount: convertedRepayAmount,
-            debtRateMode: rateMode,
-            permitParams,
-            repayAll: repayAllDebt !== null && repayAllDebt !== void 0 ? repayAllDebt : false,
-            swapAndRepayCallData,
-            augustus,
-        }, txs);
-        txs.push(swapAndRepayTx);
-        return txs;
-    }
     async flashLiquidation({ user, collateralAsset, borrowedAsset, debtTokenCover, liquidateAll, initiator, useEthPath, }) {
         const addSurplus = (amount) => {
             return (Number(amount) +
@@ -799,7 +604,7 @@ export class Pool extends BaseService {
         });
         return txs;
     }
-    async repayWithATokens({ user, amount, reserve, rateMode, useOptimizedPath, }) {
+    async repayWithATokens({ user, amount, reserve, rateMode, onBehalfOf }) {
         if (reserve.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()) {
             throw new Error('Can not repay with aTokens with eth. Should be WETH instead');
         }
@@ -812,16 +617,18 @@ export class Pool extends BaseService {
         const convertedAmount = amount === '-1'
             ? constants.MaxUint256.toString()
             : valueToWei(amount, decimals);
-        if (useOptimizedPath) {
-            return this.l2PoolService.repayWithATokens({
+        if (amount !== '-1') {
+            const fundsAvailable = await this.synthetixService.synthetixValidation({
                 user,
                 reserve,
                 amount: convertedAmount,
-                numericRateMode,
-            }, txs);
+            });
+            if (!fundsAvailable) {
+                throw new Error('Not enough funds to execute operation');
+            }
         }
         const txCallback = this.generateTxCallback({
-            rawTxMethod: async () => populateTransaction.repayWithATokens(reserve, convertedAmount, numericRateMode),
+            rawTxMethod: async () => populateTransaction.repayWithATokens(reserve, convertedAmount, numericRateMode, onBehalfOf !== null && onBehalfOf !== void 0 ? onBehalfOf : user),
             from: user,
             value: getTxValue(reserve, convertedAmount),
         });
@@ -871,7 +678,7 @@ __decorate([
     LPValidatorV3,
     __param(0, isEthAddress('user')),
     __param(0, isEthAddress('reserve')),
-    __param(0, isPositiveOrMinusOneAmount('amount')),
+    __param(0, isPositiveAmount('amount')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
@@ -935,7 +742,7 @@ __decorate([
     __param(0, isEthAddress('reserve')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", Array)
 ], Pool.prototype, "swapBorrowRateMode", null);
 __decorate([
     LPValidatorV3,
@@ -943,7 +750,7 @@ __decorate([
     __param(0, isEthAddress('reserve')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", Array)
 ], Pool.prototype, "setUsageAsCollateral", null);
 __decorate([
     LPValidatorV3,
@@ -984,20 +791,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], Pool.prototype, "repayWithCollateral", null);
 __decorate([
-    LPRepayWithCollateralValidatorV3,
-    __param(0, isEthAddress('user')),
-    __param(0, isEthAddress('fromAsset')),
-    __param(0, isEthAddress('fromAToken')),
-    __param(0, isEthAddress('assetToRepay')),
-    __param(0, isEthAddress('onBehalfOf')),
-    __param(0, isPositiveAmount('repayWithAmount')),
-    __param(0, isPositiveAmount('repayAmount')),
-    __param(0, isEthAddress('augustus')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], Pool.prototype, "paraswapRepayWithCollateral", null);
-__decorate([
     LPFlashLiquidationValidatorV3,
     __param(0, isEthAddress('user')),
     __param(0, isEthAddress('collateralAsset')),
@@ -1012,6 +805,7 @@ __decorate([
     LPValidatorV3,
     __param(0, isEthAddress('user')),
     __param(0, isEthAddress('reserve')),
+    __param(0, isEthAddress('onBehalfOf')),
     __param(0, isPositiveOrMinusOneAmount('amount')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

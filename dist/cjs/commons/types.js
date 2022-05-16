@@ -11,8 +11,6 @@ var InterestRate;
 exports.ChainIdToNetwork = {
     1: 'mainnet',
     3: 'ropsten',
-    4: 'rinkeby',
-    5: 'goerli',
     42: 'kovan',
     100: 'xDAI',
     137: 'polygon',
@@ -21,19 +19,11 @@ exports.ChainIdToNetwork = {
     43113: 'fuji',
     42161: 'arbitrum_one',
     421611: 'arbitrum_rinkeby',
-    250: 'fantom_opera',
-    4002: 'fantom_testnet',
-    10: 'optimism',
-    69: 'optimism_kovan',
-    1666600000: 'harmony',
-    1666700000: 'harmony_testnet',
 };
 var ChainId;
 (function (ChainId) {
     ChainId[ChainId["mainnet"] = 1] = "mainnet";
     ChainId[ChainId["ropsten"] = 3] = "ropsten";
-    ChainId[ChainId["rinkeby"] = 4] = "rinkeby";
-    ChainId[ChainId["goerli"] = 5] = "goerli";
     ChainId[ChainId["kovan"] = 42] = "kovan";
     ChainId[ChainId["xdai"] = 100] = "xdai";
     ChainId[ChainId["polygon"] = 137] = "polygon";
@@ -42,12 +32,6 @@ var ChainId;
     ChainId[ChainId["fuji"] = 43113] = "fuji";
     ChainId[ChainId["arbitrum_one"] = 42161] = "arbitrum_one";
     ChainId[ChainId["arbitrum_rinkeby"] = 421611] = "arbitrum_rinkeby";
-    ChainId[ChainId["fantom"] = 250] = "fantom";
-    ChainId[ChainId["fantom_testnet"] = 4002] = "fantom_testnet";
-    ChainId[ChainId["optimism"] = 10] = "optimism";
-    ChainId[ChainId["optimism_kovan"] = 69] = "optimism_kovan";
-    ChainId[ChainId["harmony"] = 1666600000] = "harmony";
-    ChainId[ChainId["harmony_testnet"] = 1666700000] = "harmony_testnet";
 })(ChainId = exports.ChainId || (exports.ChainId = {}));
 var eEthereumTxType;
 (function (eEthereumTxType) {
@@ -63,7 +47,6 @@ var eEthereumTxType;
 var ProtocolAction;
 (function (ProtocolAction) {
     ProtocolAction["default"] = "default";
-    ProtocolAction["supply"] = "supply";
     ProtocolAction["withdraw"] = "withdraw";
     ProtocolAction["deposit"] = "deposit";
     ProtocolAction["liquidationCall"] = "liquidationCall";

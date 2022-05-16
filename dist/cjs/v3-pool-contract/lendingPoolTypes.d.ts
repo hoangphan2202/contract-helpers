@@ -1,13 +1,12 @@
 import { SignatureLike } from '@ethersproject/bytes';
 import { BytesLike } from 'ethers';
 import { tEthereumAddress, InterestRate, PermitSignature } from '../commons/types';
-export declare type LPSupplyParamsType = {
+export declare type LPDepositParamsType = {
     user: tEthereumAddress;
     reserve: tEthereumAddress;
     amount: string;
     onBehalfOf?: tEthereumAddress;
     referralCode?: string;
-    useOptimizedPath?: boolean;
 };
 export declare type LPWithdrawParamsType = {
     user: tEthereumAddress;
@@ -15,7 +14,6 @@ export declare type LPWithdrawParamsType = {
     amount: string;
     onBehalfOf?: tEthereumAddress;
     aTokenAddress?: tEthereumAddress;
-    useOptimizedPath?: boolean;
 };
 export declare type LPBorrowParamsType = {
     user: tEthereumAddress;
@@ -25,7 +23,6 @@ export declare type LPBorrowParamsType = {
     debtTokenAddress?: tEthereumAddress;
     onBehalfOf?: tEthereumAddress;
     referralCode?: string;
-    useOptimizedPath?: boolean;
 };
 export declare type LPRepayParamsType = {
     user: tEthereumAddress;
@@ -33,19 +30,16 @@ export declare type LPRepayParamsType = {
     amount: string;
     interestRateMode: InterestRate;
     onBehalfOf?: tEthereumAddress;
-    useOptimizedPath?: boolean;
 };
 export declare type LPSwapBorrowRateMode = {
     user: tEthereumAddress;
     reserve: tEthereumAddress;
     interestRateMode: InterestRate;
-    useOptimizedPath?: boolean;
 };
 export declare type LPSetUsageAsCollateral = {
     user: tEthereumAddress;
     reserve: tEthereumAddress;
     usageAsCollateral: boolean;
-    useOptimizedPath?: boolean;
 };
 export declare type LPLiquidationCall = {
     liquidator: tEthereumAddress;
@@ -55,7 +49,6 @@ export declare type LPLiquidationCall = {
     purchaseAmount: string;
     getAToken?: boolean;
     liquidateAll?: boolean;
-    useOptimizedPath?: boolean;
 };
 export declare type LPSwapCollateral = {
     user: tEthereumAddress;
@@ -87,22 +80,6 @@ export declare type LPRepayWithCollateral = {
     flash?: boolean;
     useEthPath?: boolean;
 };
-export declare type LPParaswapRepayWithCollateral = {
-    user: tEthereumAddress;
-    fromAsset: tEthereumAddress;
-    fromAToken: tEthereumAddress;
-    assetToRepay: tEthereumAddress;
-    repayWithAmount: string;
-    repayAmount: string;
-    permitSignature?: PermitSignature;
-    repayAllDebt?: boolean;
-    rateMode: InterestRate;
-    onBehalfOf?: tEthereumAddress;
-    referralCode?: string;
-    flash?: boolean;
-    swapAndRepayCallData: BytesLike;
-    augustus: tEthereumAddress;
-};
 export declare type LPFlashLoan = {
     user: tEthereumAddress;
     receiver: tEthereumAddress;
@@ -127,9 +104,7 @@ export declare type LPSupplyWithPermitType = {
     onBehalfOf?: tEthereumAddress;
     amount: string;
     signature: SignatureLike;
-    referralCode?: string;
-    useOptimizedPath?: boolean;
-    deadline: string;
+    referralCode?: number;
 };
 export declare type LPRepayWithPermitParamsType = {
     user: tEthereumAddress;
@@ -138,14 +113,11 @@ export declare type LPRepayWithPermitParamsType = {
     interestRateMode: InterestRate;
     onBehalfOf?: tEthereumAddress;
     signature: SignatureLike;
-    useOptimizedPath?: boolean;
-    deadline: string;
 };
 export declare type LPSignERC20ApprovalType = {
     user: tEthereumAddress;
     reserve: tEthereumAddress;
     amount: string;
-    deadline: string;
 };
 export declare type LPSetUserEModeType = {
     user: string;
@@ -156,6 +128,6 @@ export declare type LPRepayWithATokensType = {
     reserve: string;
     amount: string;
     rateMode: InterestRate;
-    useOptimizedPath?: boolean;
+    onBehalfOf?: string;
 };
 //# sourceMappingURL=lendingPoolTypes.d.ts.map
