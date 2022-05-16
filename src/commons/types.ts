@@ -21,6 +21,8 @@ export const ChainIdToNetwork: Record<number, string> = {
   43113: 'fuji',
   42161: 'arbitrum_one',
   421611: 'arbitrum_rinkeby',
+  56 : 'bsc',
+  97 : 'bsc_testnet',
 };
 
 export enum ChainId {
@@ -34,6 +36,8 @@ export enum ChainId {
   fuji = 43113, // avalanche test network
   arbitrum_one = 42161,
   arbitrum_rinkeby = 421611,
+  bsc = 56,
+  bsc_testnet = 97,
 }
 export type ConstantAddressesByNetwork = Record<
   string,
