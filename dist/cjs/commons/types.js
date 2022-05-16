@@ -27,8 +27,6 @@ exports.ChainIdToNetwork = {
     69: 'optimism_kovan',
     1666600000: 'harmony',
     1666700000: 'harmony_testnet',
-    56: 'bsc',
-    97: 'bsc_testnet',
 };
 var ChainId;
 (function (ChainId) {
@@ -50,8 +48,6 @@ var ChainId;
     ChainId[ChainId["optimism_kovan"] = 69] = "optimism_kovan";
     ChainId[ChainId["harmony"] = 1666600000] = "harmony";
     ChainId[ChainId["harmony_testnet"] = 1666700000] = "harmony_testnet";
-    ChainId[ChainId["bsc"] = 56] = "bsc";
-    ChainId[ChainId["bsc_testnet"] = 97] = "bsc_testnet";
 })(ChainId = exports.ChainId || (exports.ChainId = {}));
 var eEthereumTxType;
 (function (eEthereumTxType) {
