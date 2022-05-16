@@ -9,8 +9,8 @@
     "check-types": "yarn build -- --noEmit",
     "prebuild": "npm run clean",
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.json --module commonjs --outDir ./dist/cjs",
-    "test": "yarn test contract-helpers",
-    "cover": "yarn cover contract-helpers",
+    "test": "yarn test",
+    "cover": "yarn cover",
     "commit": "yarn commit",
     "prepublishOnly": "yarn build"
   },
