@@ -47,7 +47,7 @@ export const humanizeProposal = (rawProposal: ProposalRPC): Proposal => {
     withDelegatecalls: rawProposal.withDelegatecalls,
     startBlock: Number(rawProposal.startBlock.toString()),
     endBlock: Number(rawProposal.endBlock.toString()),
-    executionTime: Number(rawProposal.executionTime.toString()),
+    executionTime: rawProposal.executionTime.toString(),
     forVotes: rawProposal.forVotes.toString(),
     againstVotes: rawProposal.againstVotes.toString(),
     executed: rawProposal.executed,
@@ -56,9 +56,8 @@ export const humanizeProposal = (rawProposal: ProposalRPC): Proposal => {
     state: Object.values(ProposalState)[rawProposal.proposalState],
     minimumQuorum: rawProposal.minimumQuorum.toString(),
     minimumDiff: rawProposal.minimumDiff.toString(),
-    executionTimeWithGracePeriod: Number(
+    executionTimeWithGracePeriod:
       rawProposal.executionTimeWithGracePeriod.toString(),
-    ),
     proposalCreated: Number(rawProposal.proposalCreated.toString()),
     totalVotingSupply: rawProposal.totalVotingSupply.toString(),
     ipfsHash: rawProposal.ipfsHash,

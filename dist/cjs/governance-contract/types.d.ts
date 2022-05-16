@@ -116,8 +116,8 @@ export declare type Proposal = {
     withDelegatecalls: boolean[];
     startBlock: number;
     endBlock: number;
-    executionTime: number;
-    executionTimeWithGracePeriod: number;
+    executionTime: string;
+    executionTimeWithGracePeriod: string;
     forVotes: string;
     againstVotes: string;
     executed: boolean;
