@@ -54,6 +54,10 @@ export var ChainId;
     ChainId[ChainId["harmony"] = 1666600000] = "harmony";
     ChainId[ChainId["harmony_testnet"] = 1666700000] = "harmony_testnet";
     ChainId[ChainId["zkevm_testnet"] = 1402] = "zkevm_testnet";
+    ChainId[ChainId["bsc"] = 56] = "bsc";
+    ChainId[ChainId["bsc_testnet"] = 97] = "bsc_testnet";
+    ChainId[ChainId["onus"] = 1975] = "onus";
+    ChainId[ChainId["onus_testnet"] = 1945] = "onus_testnet";
 })(ChainId || (ChainId = {}));
 export var eEthereumTxType;
 (function (eEthereumTxType) {
