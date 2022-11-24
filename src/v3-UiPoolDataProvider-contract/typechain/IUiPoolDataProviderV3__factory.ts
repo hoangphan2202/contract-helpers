@@ -12,36 +12,7 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: 'contract IChainlinkAggregator',
-        name: '_networkBaseTokenPriceInUsdProxyAggregator',
-        type: 'address',
-      },
-      {
-        internalType: 'contract IChainlinkAggregator',
-        name: '_marketReferenceCurrencyPriceInUsdProxyAggregator',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
-    inputs: [],
-    name: 'ETH_CURRENCY_UNIT',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'contract ILendingPoolAddressesProvider',
+        internalType: 'contract IPoolAddressesProvider',
         name: 'provider',
         type: 'address',
       },
@@ -196,6 +167,11 @@ const _abi = [
             type: 'uint256',
           },
           {
+            internalType: 'address',
+            name: 'priceOracle',
+            type: 'address',
+          },
+          {
             internalType: 'uint256',
             name: 'variableRateSlope1',
             type: 'uint256',
@@ -215,8 +191,103 @@ const _abi = [
             name: 'stableRateSlope2',
             type: 'uint256',
           },
+          {
+            internalType: 'uint256',
+            name: 'baseStableBorrowRate',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'baseVariableBorrowRate',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'optimalUsageRatio',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'isPaused',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'isSiloedBorrowing',
+            type: 'bool',
+          },
+          {
+            internalType: 'uint128',
+            name: 'accruedToTreasury',
+            type: 'uint128',
+          },
+          {
+            internalType: 'uint128',
+            name: 'unbacked',
+            type: 'uint128',
+          },
+          {
+            internalType: 'uint128',
+            name: 'isolationModeTotalDebt',
+            type: 'uint128',
+          },
+          {
+            internalType: 'uint256',
+            name: 'debtCeiling',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'debtCeilingDecimals',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint8',
+            name: 'eModeCategoryId',
+            type: 'uint8',
+          },
+          {
+            internalType: 'uint256',
+            name: 'borrowCap',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'supplyCap',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint16',
+            name: 'eModeLtv',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'eModeLiquidationThreshold',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'eModeLiquidationBonus',
+            type: 'uint16',
+          },
+          {
+            internalType: 'address',
+            name: 'eModePriceSource',
+            type: 'address',
+          },
+          {
+            internalType: 'string',
+            name: 'eModeLabel',
+            type: 'string',
+          },
+          {
+            internalType: 'bool',
+            name: 'borrowableInIsolation',
+            type: 'bool',
+          },
         ],
-        internalType: 'struct IUiPoolDataProvider.AggregatedReserveData[]',
+        internalType: 'struct IUiPoolDataProviderV3.AggregatedReserveData[]',
         name: '',
         type: 'tuple[]',
       },
@@ -243,7 +314,7 @@ const _abi = [
             type: 'uint8',
           },
         ],
-        internalType: 'struct IUiPoolDataProvider.BaseCurrencyInfo',
+        internalType: 'struct IUiPoolDataProviderV3.BaseCurrencyInfo',
         name: '',
         type: 'tuple',
       },
@@ -254,7 +325,7 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: 'contract ILendingPoolAddressesProvider',
+        internalType: 'contract IPoolAddressesProvider',
         name: 'provider',
         type: 'address',
       },
@@ -273,7 +344,7 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: 'contract ILendingPoolAddressesProvider',
+        internalType: 'contract IPoolAddressesProvider',
         name: 'provider',
         type: 'address',
       },
@@ -323,35 +394,14 @@ const _abi = [
             type: 'uint256',
           },
         ],
-        internalType: 'struct IUiPoolDataProvider.UserReserveData[]',
+        internalType: 'struct IUiPoolDataProviderV3.UserReserveData[]',
         name: '',
         type: 'tuple[]',
       },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'marketReferenceCurrencyPriceInUsdProxyAggregator',
-    outputs: [
       {
-        internalType: 'contract IChainlinkAggregator',
+        internalType: 'uint8',
         name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'networkBaseTokenPriceInUsdProxyAggregator',
-    outputs: [
-      {
-        internalType: 'contract IChainlinkAggregator',
-        name: '',
-        type: 'address',
+        type: 'uint8',
       },
     ],
     stateMutability: 'view',
