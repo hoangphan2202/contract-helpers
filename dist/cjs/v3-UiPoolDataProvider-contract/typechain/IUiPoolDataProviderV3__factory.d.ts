@@ -2,14 +2,24 @@ import { Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import type { IUiPoolDataProviderV3, IUiPoolDataProviderV3Interface } from './IUiPoolDataProviderV3';
 export declare class IUiPoolDataProviderV3__factory {
-    static readonly abi: {
+    static readonly abi: ({
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        name?: undefined;
+        outputs?: undefined;
+    } | {
         inputs: {
             internalType: string;
             name: string;
             type: string;
         }[];
         name: string;
-        outputs: ({
+        outputs: {
             components: {
                 internalType: string;
                 name: string;
@@ -18,15 +28,24 @@ export declare class IUiPoolDataProviderV3__factory {
             internalType: string;
             name: string;
             type: string;
-        } | {
+        }[];
+        stateMutability: string;
+        type: string;
+    } | {
+        inputs: {
             internalType: string;
             name: string;
             type: string;
-            components?: undefined;
-        })[];
+        }[];
+        name: string;
+        outputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
         stateMutability: string;
         type: string;
-    }[];
+    })[];
     static createInterface(): IUiPoolDataProviderV3Interface;
     static connect(address: string, signerOrProvider: Signer | Provider): IUiPoolDataProviderV3;
 }
