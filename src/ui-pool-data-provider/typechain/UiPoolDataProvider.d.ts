@@ -363,86 +363,125 @@ export class UiPoolDataProvider extends Contract {
   getReservesData(
     provider: string,
     overrides?: CallOverrides,
-  ): Promise<{
-    0: {
-      underlyingAsset: string;
-      name: string;
-      symbol: string;
-      decimals: BigNumber;
-      baseLTVasCollateral: BigNumber;
-      reserveLiquidationThreshold: BigNumber;
-      reserveLiquidationBonus: BigNumber;
-      reserveFactor: BigNumber;
-      usageAsCollateralEnabled: boolean;
-      borrowingEnabled: boolean;
-      stableBorrowRateEnabled: boolean;
-      isActive: boolean;
-      isFrozen: boolean;
-      liquidityIndex: BigNumber;
-      variableBorrowIndex: BigNumber;
-      liquidityRate: BigNumber;
-      variableBorrowRate: BigNumber;
-      stableBorrowRate: BigNumber;
-      lastUpdateTimestamp: number;
-      aTokenAddress: string;
-      stableDebtTokenAddress: string;
-      variableDebtTokenAddress: string;
-      interestRateStrategyAddress: string;
-      availableLiquidity: BigNumber;
-      totalPrincipalStableDebt: BigNumber;
-      averageStableRate: BigNumber;
-      stableDebtLastUpdateTimestamp: BigNumber;
-      totalScaledVariableDebt: BigNumber;
-      priceInMarketReferenceCurrency: BigNumber;
-      variableRateSlope1: BigNumber;
-      variableRateSlope2: BigNumber;
-      stableRateSlope1: BigNumber;
-      stableRateSlope2: BigNumber;
-      0: string;
-      1: string;
-      2: string;
-      3: BigNumber;
-      4: BigNumber;
-      5: BigNumber;
-      6: BigNumber;
-      7: BigNumber;
-      8: boolean;
-      9: boolean;
-      10: boolean;
-      11: boolean;
-      12: boolean;
-      13: BigNumber;
-      14: BigNumber;
-      15: BigNumber;
-      16: BigNumber;
-      17: BigNumber;
-      18: number;
-      19: string;
-      20: string;
-      21: string;
-      22: string;
-      23: BigNumber;
-      24: BigNumber;
-      25: BigNumber;
-      26: BigNumber;
-      27: BigNumber;
-      28: BigNumber;
-      29: BigNumber;
-      30: BigNumber;
-      31: BigNumber;
-      32: BigNumber;
-    }[];
-    1: {
-      marketReferenceCurrencyUnit: BigNumber;
-      marketReferenceCurrencyPriceInUsd: BigNumber;
-      networkBaseTokenPriceInUsd: BigNumber;
-      networkBaseTokenPriceDecimals: number;
-      0: BigNumber;
-      1: BigNumber;
-      2: BigNumber;
-      3: number;
-    };
-  }>;
+  ): Promise<
+    [
+      ([
+        string,
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        boolean,
+        boolean,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        number,
+        string,
+        string,
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        number,
+        BigNumber,
+        BigNumber,
+        number,
+        number,
+        number,
+        string,
+        string,
+        boolean,
+      ] & {
+        underlyingAsset: string;
+        name: string;
+        symbol: string;
+        decimals: BigNumber;
+        baseLTVasCollateral: BigNumber;
+        reserveLiquidationThreshold: BigNumber;
+        reserveLiquidationBonus: BigNumber;
+        reserveFactor: BigNumber;
+        usageAsCollateralEnabled: boolean;
+        borrowingEnabled: boolean;
+        stableBorrowRateEnabled: boolean;
+        isActive: boolean;
+        isFrozen: boolean;
+        liquidityIndex: BigNumber;
+        variableBorrowIndex: BigNumber;
+        liquidityRate: BigNumber;
+        variableBorrowRate: BigNumber;
+        stableBorrowRate: BigNumber;
+        lastUpdateTimestamp: number;
+        aTokenAddress: string;
+        stableDebtTokenAddress: string;
+        variableDebtTokenAddress: string;
+        interestRateStrategyAddress: string;
+        availableLiquidity: BigNumber;
+        totalPrincipalStableDebt: BigNumber;
+        averageStableRate: BigNumber;
+        stableDebtLastUpdateTimestamp: BigNumber;
+        totalScaledVariableDebt: BigNumber;
+        priceInMarketReferenceCurrency: BigNumber;
+        priceOracle: string;
+        variableRateSlope1: BigNumber;
+        variableRateSlope2: BigNumber;
+        stableRateSlope1: BigNumber;
+        stableRateSlope2: BigNumber;
+        baseStableBorrowRate: BigNumber;
+        baseVariableBorrowRate: BigNumber;
+        optimalUsageRatio: BigNumber;
+        isPaused: boolean;
+        isSiloedBorrowing: boolean;
+        accruedToTreasury: BigNumber;
+        unbacked: BigNumber;
+        isolationModeTotalDebt: BigNumber;
+        debtCeiling: BigNumber;
+        debtCeilingDecimals: BigNumber;
+        eModeCategoryId: number;
+        borrowCap: BigNumber;
+        supplyCap: BigNumber;
+        eModeLtv: number;
+        eModeLiquidationThreshold: number;
+        eModeLiquidationBonus: number;
+        eModePriceSource: string;
+        eModeLabel: string;
+        borrowableInIsolation: boolean;
+      })[],
+        [BigNumber, BigNumber, BigNumber, number] & {
+        marketReferenceCurrencyUnit: BigNumber;
+        marketReferenceCurrencyPriceInUsd: BigNumber;
+        networkBaseTokenPriceInUsd: BigNumber;
+        networkBaseTokenPriceDecimals: number;
+      },
+    ]
+  >;
 
   'getReservesData(address)'(
     provider: string,
