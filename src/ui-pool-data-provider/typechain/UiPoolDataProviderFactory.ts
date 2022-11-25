@@ -358,7 +358,6 @@ const _abi = [
 ];
 export class UiPoolDataProviderFactory extends ContractFactory {
   static readonly abi = _abi;
-
   static connect(
     address: string,
     signerOrProvider: Signer | Provider,
