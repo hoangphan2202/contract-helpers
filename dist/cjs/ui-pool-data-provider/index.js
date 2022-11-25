@@ -104,6 +104,27 @@ class UiPoolDataProvider {
             variableRateSlope2: reserveRaw.variableRateSlope2.toString(),
             stableRateSlope1: reserveRaw.stableRateSlope1.toString(),
             stableRateSlope2: reserveRaw.stableRateSlope2.toString(),
+            priceOracle: reserveRaw.priceOracle,
+            baseStableBorrowRate: reserveRaw.baseStableBorrowRate.toString(),
+            baseVariableBorrowRate: reserveRaw.baseVariableBorrowRate.toString(),
+            optimalUsageRatio: reserveRaw.optimalUsageRatio.toString(),
+            // new fields
+            isPaused: reserveRaw.isPaused,
+            debtCeiling: reserveRaw.debtCeiling.toString(),
+            eModeCategoryId: reserveRaw.eModeCategoryId,
+            borrowCap: reserveRaw.borrowCap.toString(),
+            supplyCap: reserveRaw.supplyCap.toString(),
+            eModeLtv: reserveRaw.eModeLtv,
+            eModeLiquidationThreshold: reserveRaw.eModeLiquidationThreshold,
+            eModeLiquidationBonus: reserveRaw.eModeLiquidationBonus,
+            eModePriceSource: reserveRaw.eModePriceSource.toString(),
+            eModeLabel: reserveRaw.eModeLabel.toString(),
+            borrowableInIsolation: reserveRaw.borrowableInIsolation,
+            accruedToTreasury: reserveRaw.accruedToTreasury.toString(),
+            unbacked: reserveRaw.unbacked.toString(),
+            isolationModeTotalDebt: reserveRaw.isolationModeTotalDebt.toString(),
+            debtCeilingDecimals: reserveRaw.debtCeilingDecimals.toNumber(),
+            isSiloedBorrowing: reserveRaw.isSiloedBorrowing,
         }));
         const baseCurrencyData = {
             // this is to get the decimals from the unit so 1e18 = string length of 19 - 1 to get the number of 0
