@@ -3,14 +3,24 @@ import { Provider } from '@ethersproject/providers';
 import { ContractFactory } from '@ethersproject/contracts';
 import { UiPoolDataProvider } from './UiPoolDataProvider';
 export declare class UiPoolDataProviderFactory extends ContractFactory {
-    static readonly abi: {
+    static readonly abi: ({
+        inputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
+        stateMutability: string;
+        type: string;
+        name?: undefined;
+        outputs?: undefined;
+    } | {
         inputs: {
             internalType: string;
             name: string;
             type: string;
         }[];
         name: string;
-        outputs: ({
+        outputs: {
             components: {
                 internalType: string;
                 name: string;
@@ -19,15 +29,24 @@ export declare class UiPoolDataProviderFactory extends ContractFactory {
             internalType: string;
             name: string;
             type: string;
-        } | {
+        }[];
+        stateMutability: string;
+        type: string;
+    } | {
+        inputs: {
             internalType: string;
             name: string;
             type: string;
-            components?: undefined;
-        })[];
+        }[];
+        name: string;
+        outputs: {
+            internalType: string;
+            name: string;
+            type: string;
+        }[];
         stateMutability: string;
         type: string;
-    }[];
+    })[];
     static connect(address: string, signerOrProvider: Signer | Provider): UiPoolDataProvider;
 }
 //# sourceMappingURL=UiPoolDataProviderFactory.d.ts.map
