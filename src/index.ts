@@ -3,7 +3,7 @@ export {
   PERMISSION,
   PERMISSION_MAP,
 } from './permissions-manager/types/PermissionManagerTypes';
-export * from './ui-incentive-data-provider';
+export * from './v3-UiIncentiveDataProvider-contract';
 export * from './ui-pool-data-provider';
 export * from './wallet-balance-provider';
 export * from './cl-feed-registry';

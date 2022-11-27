@@ -6,7 +6,7 @@ tslib_1.__exportStar(require("./permissions-manager"), exports);
 var PermissionManagerTypes_1 = require("./permissions-manager/types/PermissionManagerTypes");
 Object.defineProperty(exports, "PERMISSION", { enumerable: true, get: function () { return PermissionManagerTypes_1.PERMISSION; } });
 Object.defineProperty(exports, "PERMISSION_MAP", { enumerable: true, get: function () { return PermissionManagerTypes_1.PERMISSION_MAP; } });
-tslib_1.__exportStar(require("./ui-incentive-data-provider"), exports);
+tslib_1.__exportStar(require("./v3-UiIncentiveDataProvider-contract"), exports);
 tslib_1.__exportStar(require("./ui-pool-data-provider"), exports);
 tslib_1.__exportStar(require("./wallet-balance-provider"), exports);
 tslib_1.__exportStar(require("./cl-feed-registry"), exports);
