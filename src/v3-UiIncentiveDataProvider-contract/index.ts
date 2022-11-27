@@ -8,7 +8,7 @@ import {
 import { Denominations } from '../cl-feed-registry/types/ChainlinkFeedsRegistryTypes';
 import BaseService from '../commons/BaseService';
 import { UiIncentiveDataProviderValidator } from '../commons/validators/methodValidators';
-import { isEthAddress } from '../commons/validators/paramValidators';
+// import { isEthAddress } from '../commons/validators/paramValidators';
 import { ReservesHelperInput, UserReservesHelperInput } from '../index';
 import { IUiIncentiveDataProviderV3 } from './typechain/IUiIncentiveDataProviderV3';
 import { IUiIncentiveDataProviderV3__factory } from './typechain/IUiIncentiveDataProviderV3__factory';
@@ -97,10 +97,10 @@ export class UiIncentiveDataProvider
    *  Get the full reserve incentive data for the lending pool and the user
    * @param user The user address
    */
-  @UiIncentiveDataProviderValidator
+  // @UiIncentiveDataProviderValidator
   public async getFullReservesIncentiveData(
-    @isEthAddress('user')
-    @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
     { user, lendingPoolAddressProvider }: UserReservesHelperInput,
   ): Promise<FullReservesIncentiveDataResponse> {
     const uiIncentiveContract = this.getContractInstance(
@@ -116,9 +116,9 @@ export class UiIncentiveDataProvider
   /**
    *  Get the reserve incentive data for the lending pool
    */
-  @UiIncentiveDataProviderValidator
+  // @UiIncentiveDataProviderValidator
   public async getReservesIncentivesData(
-    @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('lendingPoolAddressProvider')
     { lendingPoolAddressProvider }: ReservesHelperInput,
   ): Promise<ReservesIncentiveData[]> {
     const uiIncentiveContract = this.getContractInstance(
@@ -136,8 +136,8 @@ export class UiIncentiveDataProvider
    */
   @UiIncentiveDataProviderValidator
   public async getUserReservesIncentivesData(
-    @isEthAddress('user')
-    @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
     { user, lendingPoolAddressProvider }: UserReservesHelperInput,
   ): Promise<UserReservesIncentivesData[]> {
     const uiIncentiveContract = this.getContractInstance(
@@ -152,7 +152,7 @@ export class UiIncentiveDataProvider
 
   @UiIncentiveDataProviderValidator
   public async getReservesIncentivesDataHumanized(
-    @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('lendingPoolAddressProvider')
     { lendingPoolAddressProvider }: ReservesHelperInput,
   ): Promise<ReservesIncentiveDataHumanized[]> {
     const response: ReservesIncentiveData[] =
@@ -169,8 +169,8 @@ export class UiIncentiveDataProvider
 
   @UiIncentiveDataProviderValidator
   public async getUserReservesIncentivesDataHumanized(
-    @isEthAddress('user')
-    @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
     { user, lendingPoolAddressProvider }: UserReservesHelperInput,
   ): Promise<UserReservesIncentivesDataHumanized[]> {
     const response: UserReservesIncentivesData[] =
@@ -194,10 +194,10 @@ export class UiIncentiveDataProvider
     }));
   }
 
-  @UiIncentiveDataProviderValidator
+  // @UiIncentiveDataProviderValidator
   public async getIncentivesDataWithPriceLegacy(
-    @isEthAddress('lendingPoolAddressProvider')
-    @isEthAddress('chainlinkFeedsRegistry')
+    // @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('chainlinkFeedsRegistry')
     {
       lendingPoolAddressProvider,
       chainlinkFeedsRegistry,

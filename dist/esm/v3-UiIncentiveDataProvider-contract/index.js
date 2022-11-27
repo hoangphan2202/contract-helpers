@@ -1,10 +1,9 @@
-import { __decorate, __metadata, __param } from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { isAddress } from 'ethers/lib/utils';
 import { ChainlinkFeedsRegistry, } from '../cl-feed-registry/index';
 import { Denominations } from '../cl-feed-registry/types/ChainlinkFeedsRegistryTypes';
 import BaseService from '../commons/BaseService';
 import { UiIncentiveDataProviderValidator } from '../commons/validators/methodValidators';
-import { isEthAddress } from '../commons/validators/paramValidators';
 import { IUiIncentiveDataProviderV3__factory } from './typechain/IUiIncentiveDataProviderV3__factory';
 export * from './types';
 export class UiIncentiveDataProvider extends BaseService {
@@ -26,14 +25,21 @@ export class UiIncentiveDataProvider extends BaseService {
      *  Get the full reserve incentive data for the lending pool and the user
      * @param user The user address
      */
-    async getFullReservesIncentiveData({ user, lendingPoolAddressProvider }) {
+    // @UiIncentiveDataProviderValidator
+    async getFullReservesIncentiveData(
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
+    { user, lendingPoolAddressProvider }) {
         const uiIncentiveContract = this.getContractInstance(this.uiIncentiveDataProviderAddress);
         return uiIncentiveContract.getFullReservesIncentiveData(lendingPoolAddressProvider, user);
     }
     /**
      *  Get the reserve incentive data for the lending pool
      */
-    async getReservesIncentivesData({ lendingPoolAddressProvider }) {
+    // @UiIncentiveDataProviderValidator
+    async getReservesIncentivesData(
+    // @isEthAddress('lendingPoolAddressProvider')
+    { lendingPoolAddressProvider }) {
         const uiIncentiveContract = this.getContractInstance(this.uiIncentiveDataProviderAddress);
         return uiIncentiveContract.getReservesIncentivesData(lendingPoolAddressProvider);
     }
@@ -41,11 +47,16 @@ export class UiIncentiveDataProvider extends BaseService {
      *  Get the reserve incentive data for the user
      * @param user The user address
      */
-    async getUserReservesIncentivesData({ user, lendingPoolAddressProvider }) {
+    async getUserReservesIncentivesData(
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
+    { user, lendingPoolAddressProvider }) {
         const uiIncentiveContract = this.getContractInstance(this.uiIncentiveDataProviderAddress);
         return uiIncentiveContract.getUserReservesIncentivesData(lendingPoolAddressProvider, user);
     }
-    async getReservesIncentivesDataHumanized({ lendingPoolAddressProvider }) {
+    async getReservesIncentivesDataHumanized(
+    // @isEthAddress('lendingPoolAddressProvider')
+    { lendingPoolAddressProvider }) {
         const response = await this.getReservesIncentivesData({ lendingPoolAddressProvider });
         return response.map(r => ({
             id: `${this.chainId}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
@@ -55,7 +66,10 @@ export class UiIncentiveDataProvider extends BaseService {
             sIncentiveData: this._formatIncentiveData(r.sIncentiveData),
         }));
     }
-    async getUserReservesIncentivesDataHumanized({ user, lendingPoolAddressProvider }) {
+    async getUserReservesIncentivesDataHumanized(
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
+    { user, lendingPoolAddressProvider }) {
         const response = await this.getUserReservesIncentivesData({
             user,
             lendingPoolAddressProvider,
@@ -68,7 +82,11 @@ export class UiIncentiveDataProvider extends BaseService {
             sTokenIncentivesUserData: this._formatUserIncentiveData(r.sTokenIncentivesUserData),
         }));
     }
-    async getIncentivesDataWithPriceLegacy({ lendingPoolAddressProvider, chainlinkFeedsRegistry, quote = Denominations.eth, }) {
+    // @UiIncentiveDataProviderValidator
+    async getIncentivesDataWithPriceLegacy(
+    // @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('chainlinkFeedsRegistry')
+    { lendingPoolAddressProvider, chainlinkFeedsRegistry, quote = Denominations.eth, }) {
         const incentives = await this.getReservesIncentivesDataHumanized({
             lendingPoolAddressProvider,
         });
@@ -168,48 +186,20 @@ export class UiIncentiveDataProvider extends BaseService {
 }
 __decorate([
     UiIncentiveDataProviderValidator,
-    __param(0, isEthAddress('user')),
-    __param(0, isEthAddress('lendingPoolAddressProvider')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UiIncentiveDataProvider.prototype, "getFullReservesIncentiveData", null);
-__decorate([
-    UiIncentiveDataProviderValidator,
-    __param(0, isEthAddress('lendingPoolAddressProvider')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UiIncentiveDataProvider.prototype, "getReservesIncentivesData", null);
-__decorate([
-    UiIncentiveDataProviderValidator,
-    __param(0, isEthAddress('user')),
-    __param(0, isEthAddress('lendingPoolAddressProvider')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UiIncentiveDataProvider.prototype, "getUserReservesIncentivesData", null);
 __decorate([
     UiIncentiveDataProviderValidator,
-    __param(0, isEthAddress('lendingPoolAddressProvider')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UiIncentiveDataProvider.prototype, "getReservesIncentivesDataHumanized", null);
 __decorate([
     UiIncentiveDataProviderValidator,
-    __param(0, isEthAddress('user')),
-    __param(0, isEthAddress('lendingPoolAddressProvider')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UiIncentiveDataProvider.prototype, "getUserReservesIncentivesDataHumanized", null);
-__decorate([
-    UiIncentiveDataProviderValidator,
-    __param(0, isEthAddress('lendingPoolAddressProvider')),
-    __param(0, isEthAddress('chainlinkFeedsRegistry')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UiIncentiveDataProvider.prototype, "getIncentivesDataWithPriceLegacy", null);
 //# sourceMappingURL=index.js.map

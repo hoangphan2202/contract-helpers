@@ -7,7 +7,6 @@ const index_1 = require("../cl-feed-registry/index");
 const ChainlinkFeedsRegistryTypes_1 = require("../cl-feed-registry/types/ChainlinkFeedsRegistryTypes");
 const BaseService_1 = tslib_1.__importDefault(require("../commons/BaseService"));
 const methodValidators_1 = require("../commons/validators/methodValidators");
-const paramValidators_1 = require("../commons/validators/paramValidators");
 const IUiIncentiveDataProviderV3__factory_1 = require("./typechain/IUiIncentiveDataProviderV3__factory");
 tslib_1.__exportStar(require("./types"), exports);
 class UiIncentiveDataProvider extends BaseService_1.default {
@@ -29,14 +28,21 @@ class UiIncentiveDataProvider extends BaseService_1.default {
      *  Get the full reserve incentive data for the lending pool and the user
      * @param user The user address
      */
-    async getFullReservesIncentiveData({ user, lendingPoolAddressProvider }) {
+    // @UiIncentiveDataProviderValidator
+    async getFullReservesIncentiveData(
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
+    { user, lendingPoolAddressProvider }) {
         const uiIncentiveContract = this.getContractInstance(this.uiIncentiveDataProviderAddress);
         return uiIncentiveContract.getFullReservesIncentiveData(lendingPoolAddressProvider, user);
     }
     /**
      *  Get the reserve incentive data for the lending pool
      */
-    async getReservesIncentivesData({ lendingPoolAddressProvider }) {
+    // @UiIncentiveDataProviderValidator
+    async getReservesIncentivesData(
+    // @isEthAddress('lendingPoolAddressProvider')
+    { lendingPoolAddressProvider }) {
         const uiIncentiveContract = this.getContractInstance(this.uiIncentiveDataProviderAddress);
         return uiIncentiveContract.getReservesIncentivesData(lendingPoolAddressProvider);
     }
@@ -44,11 +50,16 @@ class UiIncentiveDataProvider extends BaseService_1.default {
      *  Get the reserve incentive data for the user
      * @param user The user address
      */
-    async getUserReservesIncentivesData({ user, lendingPoolAddressProvider }) {
+    async getUserReservesIncentivesData(
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
+    { user, lendingPoolAddressProvider }) {
         const uiIncentiveContract = this.getContractInstance(this.uiIncentiveDataProviderAddress);
         return uiIncentiveContract.getUserReservesIncentivesData(lendingPoolAddressProvider, user);
     }
-    async getReservesIncentivesDataHumanized({ lendingPoolAddressProvider }) {
+    async getReservesIncentivesDataHumanized(
+    // @isEthAddress('lendingPoolAddressProvider')
+    { lendingPoolAddressProvider }) {
         const response = await this.getReservesIncentivesData({ lendingPoolAddressProvider });
         return response.map(r => ({
             id: `${this.chainId}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
@@ -58,7 +69,10 @@ class UiIncentiveDataProvider extends BaseService_1.default {
             sIncentiveData: this._formatIncentiveData(r.sIncentiveData),
         }));
     }
-    async getUserReservesIncentivesDataHumanized({ user, lendingPoolAddressProvider }) {
+    async getUserReservesIncentivesDataHumanized(
+    // @isEthAddress('user')
+    // @isEthAddress('lendingPoolAddressProvider')
+    { user, lendingPoolAddressProvider }) {
         const response = await this.getUserReservesIncentivesData({
             user,
             lendingPoolAddressProvider,
@@ -71,7 +85,11 @@ class UiIncentiveDataProvider extends BaseService_1.default {
             sTokenIncentivesUserData: this._formatUserIncentiveData(r.sTokenIncentivesUserData),
         }));
     }
-    async getIncentivesDataWithPriceLegacy({ lendingPoolAddressProvider, chainlinkFeedsRegistry, quote = ChainlinkFeedsRegistryTypes_1.Denominations.eth, }) {
+    // @UiIncentiveDataProviderValidator
+    async getIncentivesDataWithPriceLegacy(
+    // @isEthAddress('lendingPoolAddressProvider')
+    // @isEthAddress('chainlinkFeedsRegistry')
+    { lendingPoolAddressProvider, chainlinkFeedsRegistry, quote = ChainlinkFeedsRegistryTypes_1.Denominations.eth, }) {
         const incentives = await this.getReservesIncentivesDataHumanized({
             lendingPoolAddressProvider,
         });
@@ -171,49 +189,21 @@ class UiIncentiveDataProvider extends BaseService_1.default {
 }
 tslib_1.__decorate([
     methodValidators_1.UiIncentiveDataProviderValidator,
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('user')),
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('lendingPoolAddressProvider')),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object]),
-    tslib_1.__metadata("design:returntype", Promise)
-], UiIncentiveDataProvider.prototype, "getFullReservesIncentiveData", null);
-tslib_1.__decorate([
-    methodValidators_1.UiIncentiveDataProviderValidator,
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('lendingPoolAddressProvider')),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object]),
-    tslib_1.__metadata("design:returntype", Promise)
-], UiIncentiveDataProvider.prototype, "getReservesIncentivesData", null);
-tslib_1.__decorate([
-    methodValidators_1.UiIncentiveDataProviderValidator,
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('user')),
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('lendingPoolAddressProvider')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UiIncentiveDataProvider.prototype, "getUserReservesIncentivesData", null);
 tslib_1.__decorate([
     methodValidators_1.UiIncentiveDataProviderValidator,
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('lendingPoolAddressProvider')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UiIncentiveDataProvider.prototype, "getReservesIncentivesDataHumanized", null);
 tslib_1.__decorate([
     methodValidators_1.UiIncentiveDataProviderValidator,
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('user')),
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('lendingPoolAddressProvider')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UiIncentiveDataProvider.prototype, "getUserReservesIncentivesDataHumanized", null);
-tslib_1.__decorate([
-    methodValidators_1.UiIncentiveDataProviderValidator,
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('lendingPoolAddressProvider')),
-    tslib_1.__param(0, (0, paramValidators_1.isEthAddress)('chainlinkFeedsRegistry')),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object]),
-    tslib_1.__metadata("design:returntype", Promise)
-], UiIncentiveDataProvider.prototype, "getIncentivesDataWithPriceLegacy", null);
 exports.UiIncentiveDataProvider = UiIncentiveDataProvider;
 //# sourceMappingURL=index.js.map
