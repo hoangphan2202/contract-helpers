@@ -8,6 +8,9 @@ const ChainlinkFeedsRegistryTypes_1 = require("./types/ChainlinkFeedsRegistryTyp
 tslib_1.__exportStar(require("./types/ChainlinkFeedsRegistryTypes"), exports);
 class ChainlinkFeedsRegistry {
     constructor({ provider, chainlinkFeedsRegistry, }) {
+        // if (!isAddress(chainlinkFeedsRegistry)) {
+        //   throw new Error('contract address is not valid');
+        // }
         this.latestRoundData = async (tokenAddress, quote) => {
             if (!(0, utils_1.isAddress)(tokenAddress)) {
                 throw new Error('tokenAddress is not valid');
@@ -29,9 +32,6 @@ class ChainlinkFeedsRegistry {
                 decimals: feedDecimals,
             };
         };
-        if (!(0, utils_1.isAddress)(chainlinkFeedsRegistry)) {
-            throw new Error('contract address is not valid');
-        }
         this._registryContract = FeedRegistryInterface__factory_1.FeedRegistryInterface__factory.connect(chainlinkFeedsRegistry, provider);
     }
 }

@@ -4,6 +4,9 @@ import { DenominationAddresses, } from './types/ChainlinkFeedsRegistryTypes';
 export * from './types/ChainlinkFeedsRegistryTypes';
 export class ChainlinkFeedsRegistry {
     constructor({ provider, chainlinkFeedsRegistry, }) {
+        // if (!isAddress(chainlinkFeedsRegistry)) {
+        //   throw new Error('contract address is not valid');
+        // }
         this.latestRoundData = async (tokenAddress, quote) => {
             if (!isAddress(tokenAddress)) {
                 throw new Error('tokenAddress is not valid');
@@ -25,9 +28,6 @@ export class ChainlinkFeedsRegistry {
                 decimals: feedDecimals,
             };
         };
-        if (!isAddress(chainlinkFeedsRegistry)) {
-            throw new Error('contract address is not valid');
-        }
         this._registryContract = FeedRegistryInterface__factory.connect(chainlinkFeedsRegistry, provider);
     }
 }
