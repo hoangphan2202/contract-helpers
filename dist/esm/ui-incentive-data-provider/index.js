@@ -9,13 +9,13 @@ export class UiIncentiveDataProvider {
      * @param context The ui incentive data provider context
      */
     constructor(context) {
+        // if (!isAddress(context.incentiveDataProviderAddress)) {
+        //   throw new Error('contract address is not valid');
+        // }
         this._getFeed = async (rewardToken, chainlinkFeedsRegistry, quote) => {
             const feed = await this._chainlinkFeedsRegistries[chainlinkFeedsRegistry].getPriceFeed(rewardToken, quote);
             return Object.assign(Object.assign({}, feed), { rewardTokenAddress: rewardToken });
         };
-        if (!isAddress(context.incentiveDataProviderAddress)) {
-            throw new Error('contract address is not valid');
-        }
         this._context = context;
         this._chainlinkFeedsRegistries = {};
         this._contract = UiIncentiveDataProviderFactory.connect(context.incentiveDataProviderAddress, context.provider);

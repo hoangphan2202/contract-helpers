@@ -3,9 +3,9 @@ import { PermissionManagerFactory } from './typechain/PermissionManagerFactory';
 import { PERMISSION_MAP, } from './types/PermissionManagerTypes';
 export class PermissionManager {
     constructor(context) {
-        if (!isAddress(context.permissionManagerAddress)) {
-            throw new Error('contract address is not valid');
-        }
+        // if (!isAddress(context.permissionManagerAddress)) {
+        //   throw new Error('contract address is not valid');
+        // }
         this._contract = PermissionManagerFactory.connect(context.permissionManagerAddress, context.provider);
     }
     async getUserPermissions(user) {

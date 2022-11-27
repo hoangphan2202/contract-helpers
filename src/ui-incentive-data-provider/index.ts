@@ -84,9 +84,9 @@ export class UiIncentiveDataProvider
    * @param context The ui incentive data provider context
    */
   public constructor(context: UiIncentiveDataProviderContext) {
-    if (!isAddress(context.incentiveDataProviderAddress)) {
-      throw new Error('contract address is not valid');
-    }
+    // if (!isAddress(context.incentiveDataProviderAddress)) {
+    //   throw new Error('contract address is not valid');
+    // }
 
     this._context = context;
 

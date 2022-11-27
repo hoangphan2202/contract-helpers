@@ -65,9 +65,9 @@ export class UiPoolDataProvider implements UiPoolDataProviderInterface {
    * @param context The ui pool data provider context
    */
   public constructor(context: UiPoolDataProviderContext) {
-    if (!isAddress(context.uiPoolDataProviderAddress)) {
-      throw new Error('contract address is not valid');
-    }
+    // if (!isAddress(context.uiPoolDataProviderAddress)) {
+    //   throw new Error('contract address is not valid');
+    // }
 
     this._contract = UiPoolDataProviderFactory.connect(
       context.uiPoolDataProviderAddress,

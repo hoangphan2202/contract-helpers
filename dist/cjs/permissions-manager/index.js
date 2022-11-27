@@ -6,9 +6,9 @@ const PermissionManagerFactory_1 = require("./typechain/PermissionManagerFactory
 const PermissionManagerTypes_1 = require("./types/PermissionManagerTypes");
 class PermissionManager {
     constructor(context) {
-        if (!(0, utils_1.isAddress)(context.permissionManagerAddress)) {
-            throw new Error('contract address is not valid');
-        }
+        // if (!isAddress(context.permissionManagerAddress)) {
+        //   throw new Error('contract address is not valid');
+        // }
         this._contract = PermissionManagerFactory_1.PermissionManagerFactory.connect(context.permissionManagerAddress, context.provider);
     }
     async getUserPermissions(user) {

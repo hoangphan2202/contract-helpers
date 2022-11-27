@@ -18,9 +18,9 @@ export class PermissionManager {
   private readonly _contract: PermissionManagerContract;
 
   public constructor(context: PermissionManagerContext) {
-    if (!isAddress(context.permissionManagerAddress)) {
-      throw new Error('contract address is not valid');
-    }
+    // if (!isAddress(context.permissionManagerAddress)) {
+    //   throw new Error('contract address is not valid');
+    // }
 
     this._contract = PermissionManagerFactory.connect(
       context.permissionManagerAddress,

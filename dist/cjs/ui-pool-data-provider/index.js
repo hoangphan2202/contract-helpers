@@ -29,9 +29,9 @@ class UiPoolDataProvider {
      * @param context The ui pool data provider context
      */
     constructor(context) {
-        if (!(0, utils_1.isAddress)(context.uiPoolDataProviderAddress)) {
-            throw new Error('contract address is not valid');
-        }
+        // if (!isAddress(context.uiPoolDataProviderAddress)) {
+        //   throw new Error('contract address is not valid');
+        // }
         this._contract = UiPoolDataProviderFactory_1.UiPoolDataProviderFactory.connect(context.uiPoolDataProviderAddress, context.provider);
         this.chainId = context.chainId;
     }
