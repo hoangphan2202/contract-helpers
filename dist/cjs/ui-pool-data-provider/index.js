@@ -104,7 +104,7 @@ class UiPoolDataProvider {
             variableRateSlope2: reserveRaw.variableRateSlope2.toString(),
             stableRateSlope1: reserveRaw.stableRateSlope1.toString(),
             stableRateSlope2: reserveRaw.stableRateSlope2.toString(),
-            // fix pool V2
+            // fake pool V2
             priceOracle: "",
             baseStableBorrowRate: "0",
             baseVariableBorrowRate: "0",
