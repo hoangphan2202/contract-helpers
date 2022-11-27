@@ -35,9 +35,9 @@ export class ChainlinkFeedsRegistry implements ChainlinkFeedsRegistryInterface {
     provider,
     chainlinkFeedsRegistry,
   }: ChainlinkFeedsRegistryContext) {
-    if (!isAddress(chainlinkFeedsRegistry)) {
-      throw new Error('contract address is not valid');
-    }
+    // if (!isAddress(chainlinkFeedsRegistry)) {
+    //   throw new Error('contract address is not valid');
+    // }
 
     this._registryContract = FeedRegistryInterface__factory.connect(
       chainlinkFeedsRegistry,
