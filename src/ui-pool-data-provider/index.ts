@@ -65,9 +65,9 @@ export class UiPoolDataProvider implements UiPoolDataProviderInterface {
    * @param context The ui pool data provider context
    */
   public constructor(context: UiPoolDataProviderContext) {
-    // if (!isAddress(context.uiPoolDataProviderAddress)) {
-    //   throw new Error('contract address is not valid');
-    // }
+    if (!isAddress(context.uiPoolDataProviderAddress)) {
+      throw new Error('contract address is not valid');
+    }
 
     this._contract = UiPoolDataProviderFactory.connect(
       context.uiPoolDataProviderAddress,
@@ -171,27 +171,27 @@ export class UiPoolDataProvider implements UiPoolDataProviderInterface {
         stableRateSlope1: reserveRaw.stableRateSlope1.toString(),
         stableRateSlope2: reserveRaw.stableRateSlope2.toString(),
 
-        priceOracle: reserveRaw.priceOracle,
-        baseStableBorrowRate: reserveRaw.baseStableBorrowRate.toString(),
-        baseVariableBorrowRate: reserveRaw.baseVariableBorrowRate.toString(),
-        optimalUsageRatio: reserveRaw.optimalUsageRatio.toString(),
-        // new fields
-        isPaused: reserveRaw.isPaused,
-        debtCeiling: reserveRaw.debtCeiling.toString(),
-        eModeCategoryId: reserveRaw.eModeCategoryId,
-        borrowCap: reserveRaw.borrowCap.toString(),
-        supplyCap: reserveRaw.supplyCap.toString(),
-        eModeLtv: reserveRaw.eModeLtv,
-        eModeLiquidationThreshold: reserveRaw.eModeLiquidationThreshold,
-        eModeLiquidationBonus: reserveRaw.eModeLiquidationBonus,
-        eModePriceSource: reserveRaw.eModePriceSource.toString(),
-        eModeLabel: reserveRaw.eModeLabel.toString(),
-        borrowableInIsolation: reserveRaw.borrowableInIsolation,
-        accruedToTreasury: reserveRaw.accruedToTreasury.toString(),
-        unbacked: reserveRaw.unbacked.toString(),
-        isolationModeTotalDebt: reserveRaw.isolationModeTotalDebt.toString(),
-        debtCeilingDecimals: reserveRaw.debtCeilingDecimals.toNumber(),
-        isSiloedBorrowing: reserveRaw.isSiloedBorrowing,
+        // fix pool V2
+        priceOracle: "",
+        baseStableBorrowRate: "0",
+        baseVariableBorrowRate: "0",
+        optimalUsageRatio: "0",
+        isPaused: false,
+        debtCeiling: "0",
+        eModeCategoryId: 0,
+        borrowCap: "0",
+        supplyCap: "0",
+        eModeLtv: 0,
+        eModeLiquidationThreshold: 0,
+        eModeLiquidationBonus: 0,
+        eModePriceSource: "0x0000000000000000000000000000000000000000",
+        eModeLabel: "",
+        borrowableInIsolation: false,
+        accruedToTreasury: "0",
+        unbacked: "0",
+        isolationModeTotalDebt: "0",
+        debtCeilingDecimals: 0,
+        isSiloedBorrowing: false,
       }),
     );
 
