@@ -13,13 +13,13 @@ class UiIncentiveDataProvider {
      * @param context The ui incentive data provider context
      */
     constructor(context) {
-        // if (!isAddress(context.incentiveDataProviderAddress)) {
-        //   throw new Error('contract address is not valid');
-        // }
         this._getFeed = async (rewardToken, chainlinkFeedsRegistry, quote) => {
             const feed = await this._chainlinkFeedsRegistries[chainlinkFeedsRegistry].getPriceFeed(rewardToken, quote);
             return Object.assign(Object.assign({}, feed), { rewardTokenAddress: rewardToken });
         };
+        if (!(0, utils_1.isAddress)(context.incentiveDataProviderAddress)) {
+            throw new Error('contract address is not valid');
+        }
         this._context = context;
         this._chainlinkFeedsRegistries = {};
         this._contract = UiIncentiveDataProviderFactory_1.UiIncentiveDataProviderFactory.connect(context.incentiveDataProviderAddress, context.provider);
@@ -29,7 +29,7 @@ class UiIncentiveDataProvider {
      *  Get the full reserve incentive data for the lending pool and the user
      * @param user The user address
      */
-    async getFullReservesIncentiveData(user, lendingPoolAddressProvider) {
+    async getFullReservesIncentiveData({ user, lendingPoolAddressProvider }) {
         if (!(0, utils_1.isAddress)(lendingPoolAddressProvider)) {
             throw new Error('Lending pool address provider is not valid');
         }
@@ -41,14 +41,14 @@ class UiIncentiveDataProvider {
     /**
      *  Get the reserve incentive data for the lending pool
      */
-    async getReservesIncentivesData(lendingPoolAddressProvider) {
+    async getReservesIncentivesData({ lendingPoolAddressProvider }) {
         if (!(0, utils_1.isAddress)(lendingPoolAddressProvider)) {
             throw new Error('Lending pool address provider is not valid');
         }
         return this._contract.getReservesIncentivesData(lendingPoolAddressProvider);
     }
-    async getReservesIncentivesDataHumanized(lendingPoolAddressProvider) {
-        const response = await this.getReservesIncentivesData(lendingPoolAddressProvider);
+    async getReservesIncentivesDataHumanized({ lendingPoolAddressProvider }) {
+        const response = await this.getReservesIncentivesData({ lendingPoolAddressProvider });
         return response.map(r => ({
             id: `${this.chainId}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
             underlyingAsset: r.underlyingAsset.toLowerCase(),
@@ -57,8 +57,8 @@ class UiIncentiveDataProvider {
             sIncentiveData: this._formatIncentiveData(r.sIncentiveData),
         }));
     }
-    async getUserReservesIncentivesDataHumanized(user, lendingPoolAddressProvider) {
-        const response = await this.getUserReservesIncentivesData(user, lendingPoolAddressProvider);
+    async getUserReservesIncentivesDataHumanized({ user, lendingPoolAddressProvider }) {
+        const response = await this.getUserReservesIncentivesData({ user, lendingPoolAddressProvider });
         return response.map(r => ({
             id: `${this.chainId}-${user}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
             underlyingAsset: r.underlyingAsset.toLowerCase(),
@@ -71,7 +71,7 @@ class UiIncentiveDataProvider {
      *  Get the reserve incentive data for the user
      * @param user The user address
      */
-    async getUserReservesIncentivesData(user, lendingPoolAddressProvider) {
+    async getUserReservesIncentivesData({ user, lendingPoolAddressProvider }) {
         if (!(0, utils_1.isAddress)(lendingPoolAddressProvider)) {
             throw new Error('Lending pool address provider is not valid');
         }
@@ -81,7 +81,7 @@ class UiIncentiveDataProvider {
         return this._contract.getUserReservesIncentivesData(lendingPoolAddressProvider, user);
     }
     async getIncentivesDataWithPrice({ lendingPoolAddressProvider, chainlinkFeedsRegistry, quote = ChainlinkFeedsRegistryTypes_1.Denominations.eth, }) {
-        const incentives = await this.getReservesIncentivesDataHumanized(lendingPoolAddressProvider);
+        const incentives = await this.getReservesIncentivesDataHumanized({ lendingPoolAddressProvider: lendingPoolAddressProvider });
         const feeds = [];
         if (chainlinkFeedsRegistry && (0, utils_1.isAddress)(chainlinkFeedsRegistry)) {
             if (!this._chainlinkFeedsRegistries[chainlinkFeedsRegistry]) {
@@ -132,6 +132,19 @@ class UiIncentiveDataProvider {
             incentivesLastUpdateTimestamp: data.incentivesLastUpdateTimestamp.toNumber(),
             tokenIncentivesIndex: data.tokenIncentivesIndex.toString(),
             emissionEndTimestamp: data.emissionEndTimestamp.toNumber(),
+            rewardsTokenInformation: [{
+                    precision: data.precision,
+                    rewardTokenAddress: data.rewardTokenAddress,
+                    rewardTokenDecimals: data.rewardTokenDecimals,
+                    emissionPerSecond: data.emissionPerSecond.toString(),
+                    incentivesLastUpdateTimestamp: data.incentivesLastUpdateTimestamp.toNumber(),
+                    tokenIncentivesIndex: data.tokenIncentivesIndex.toString(),
+                    emissionEndTimestamp: data.emissionEndTimestamp.toNumber(),
+                    rewardOracleAddress: "0x0000000000000000000000000000000000000000",
+                    rewardPriceFeed: "0",
+                    priceFeedDecimals: 0,
+                    rewardTokenSymbol: "WBNB"
+                }],
         };
     }
     _formatUserIncentiveData(data) {
@@ -142,6 +155,16 @@ class UiIncentiveDataProvider {
             rewardTokenDecimals: data.rewardTokenDecimals,
             tokenIncentivesUserIndex: data.tokenincentivesUserIndex.toString(),
             userUnclaimedRewards: data.userUnclaimedRewards.toString(),
+            userRewardsInformation: [{
+                    rewardTokenAddress: data.rewardTokenAddress,
+                    rewardTokenDecimals: data.rewardTokenDecimals,
+                    tokenIncentivesUserIndex: data.tokenincentivesUserIndex.toString(),
+                    userUnclaimedRewards: data.userUnclaimedRewards.toString(),
+                    rewardOracleAddress: "0x0000000000000000000000000000000000000000",
+                    rewardPriceFeed: "0",
+                    priceFeedDecimals: 0,
+                    rewardTokenSymbol: "WBNB"
+                }],
         };
     }
 }

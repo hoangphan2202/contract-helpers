@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers';
+import { RewardInfoHumanized, UserRewardInfoHumanized } from "contract-helpers/src/v3-UiIncentiveDataProvider-contract";
 
 export interface IncentiveData {
   emissionPerSecond: BigNumber;
@@ -31,6 +32,7 @@ export interface IncentiveDataHumanized {
   incentiveControllerAddress: string;
   rewardTokenDecimals: number;
   precision: number;
+  rewardsTokenInformation: RewardInfoHumanized[];
 }
 
 export interface IncentivesWithFeeds extends IncentiveDataHumanized {
@@ -61,6 +63,8 @@ export interface IncentiveUserDataHumanized {
   rewardTokenAddress: string;
   incentiveControllerAddress: string;
   rewardTokenDecimals: number;
+
+  userRewardsInformation: UserRewardInfoHumanized[];
 }
 
 export interface ReserveIncentiveDataResponse {

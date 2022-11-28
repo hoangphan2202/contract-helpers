@@ -20,27 +20,22 @@ import {
   UserReserveIncentiveDataHumanizedResponse,
   UserReserveIncentiveDataResponse,
 } from './types/UiIncentiveDataProviderTypes';
+import { ReservesHelperInput, UserReservesHelperInput } from "contract-helpers/src/index";
 export * from './types/UiIncentiveDataProviderTypes';
 
 export interface UiIncentiveDataProviderInterface {
   getFullReservesIncentiveData: (
-    user: string,
-    incentiveDataProviderAddress: string,
-    lendingPoolAddressProvider: string,
+    args: UserReservesHelperInput,
   ) => Promise<FullReservesIncentiveDataResponse>;
   getReservesIncentivesData: (
-    lendingPoolAddressProvider: string,
+    args: ReservesHelperInput,
   ) => Promise<ReserveIncentiveDataResponse[]>;
-  getUserReservesIncentivesData: (
-    user: string,
-    lendingPoolAddressProvider: string,
-  ) => Promise<UserReserveIncentiveDataResponse[]>;
+  getUserReservesIncentivesData: (args: UserReservesHelperInput) => Promise<UserReserveIncentiveDataResponse[]>;
   getReservesIncentivesDataHumanized: (
-    lendingPoolAddressProvider: string,
+    args: ReservesHelperInput,
   ) => Promise<ReserveIncentiveDataHumanizedResponse[]>;
   getUserReservesIncentivesDataHumanized: (
-    user: string,
-    lendingPoolAddressProvider: string,
+    args: UserReservesHelperInput
   ) => Promise<UserReserveIncentiveDataHumanizedResponse[]>;
   getIncentivesDataWithPrice: (
     args: GetIncentivesDataWithPriceType,
@@ -84,9 +79,9 @@ export class UiIncentiveDataProvider
    * @param context The ui incentive data provider context
    */
   public constructor(context: UiIncentiveDataProviderContext) {
-    // if (!isAddress(context.incentiveDataProviderAddress)) {
-    //   throw new Error('contract address is not valid');
-    // }
+    if (!isAddress(context.incentiveDataProviderAddress)) {
+      throw new Error('contract address is not valid');
+    }
 
     this._context = context;
 
@@ -104,10 +99,7 @@ export class UiIncentiveDataProvider
    *  Get the full reserve incentive data for the lending pool and the user
    * @param user The user address
    */
-  public async getFullReservesIncentiveData(
-    user: string,
-    lendingPoolAddressProvider: string,
-  ): Promise<FullReservesIncentiveDataResponse> {
+  public async getFullReservesIncentiveData({ user, lendingPoolAddressProvider }: UserReservesHelperInput): Promise<FullReservesIncentiveDataResponse> {
     if (!isAddress(lendingPoolAddressProvider)) {
       throw new Error('Lending pool address provider is not valid');
     }
@@ -126,7 +118,7 @@ export class UiIncentiveDataProvider
    *  Get the reserve incentive data for the lending pool
    */
   public async getReservesIncentivesData(
-    lendingPoolAddressProvider: string,
+    { lendingPoolAddressProvider }: ReservesHelperInput,
   ): Promise<ReserveIncentiveDataResponse[]> {
     if (!isAddress(lendingPoolAddressProvider)) {
       throw new Error('Lending pool address provider is not valid');
@@ -136,10 +128,10 @@ export class UiIncentiveDataProvider
   }
 
   public async getReservesIncentivesDataHumanized(
-    lendingPoolAddressProvider: string,
+    { lendingPoolAddressProvider }: ReservesHelperInput,
   ): Promise<ReserveIncentiveDataHumanizedResponse[]> {
     const response = await this.getReservesIncentivesData(
-      lendingPoolAddressProvider,
+      {lendingPoolAddressProvider},
     );
 
     return response.map(r => ({
@@ -151,14 +143,8 @@ export class UiIncentiveDataProvider
     }));
   }
 
-  public async getUserReservesIncentivesDataHumanized(
-    user: string,
-    lendingPoolAddressProvider: string,
-  ): Promise<UserReserveIncentiveDataHumanizedResponse[]> {
-    const response = await this.getUserReservesIncentivesData(
-      user,
-      lendingPoolAddressProvider,
-    );
+  public async getUserReservesIncentivesDataHumanized({ user, lendingPoolAddressProvider }: UserReservesHelperInput): Promise<UserReserveIncentiveDataHumanizedResponse[]> {
+    const response = await this.getUserReservesIncentivesData({user, lendingPoolAddressProvider});
 
     return response.map(r => ({
       id: `${this.chainId}-${user}-${r.underlyingAsset}-${lendingPoolAddressProvider}`.toLowerCase(),
@@ -179,10 +165,7 @@ export class UiIncentiveDataProvider
    *  Get the reserve incentive data for the user
    * @param user The user address
    */
-  public async getUserReservesIncentivesData(
-    user: string,
-    lendingPoolAddressProvider: string,
-  ): Promise<UserReserveIncentiveDataResponse[]> {
+  public async getUserReservesIncentivesData({ user, lendingPoolAddressProvider }: UserReservesHelperInput): Promise<UserReserveIncentiveDataResponse[]> {
     if (!isAddress(lendingPoolAddressProvider)) {
       throw new Error('Lending pool address provider is not valid');
     }
@@ -205,7 +188,7 @@ export class UiIncentiveDataProvider
     ReserveIncentiveWithFeedsResponse[]
   > {
     const incentives: ReserveIncentiveDataHumanizedResponse[] =
-      await this.getReservesIncentivesDataHumanized(lendingPoolAddressProvider);
+      await this.getReservesIncentivesDataHumanized({lendingPoolAddressProvider:lendingPoolAddressProvider});
     const feeds: FeedResultSuccessful[] = [];
 
     if (chainlinkFeedsRegistry && isAddress(chainlinkFeedsRegistry)) {
@@ -317,6 +300,20 @@ export class UiIncentiveDataProvider
         data.incentivesLastUpdateTimestamp.toNumber(),
       tokenIncentivesIndex: data.tokenIncentivesIndex.toString(),
       emissionEndTimestamp: data.emissionEndTimestamp.toNumber(),
+      rewardsTokenInformation: [{
+        precision: data.precision,
+        rewardTokenAddress: data.rewardTokenAddress,
+        rewardTokenDecimals: data.rewardTokenDecimals,
+        emissionPerSecond: data.emissionPerSecond.toString(),
+        incentivesLastUpdateTimestamp:
+          data.incentivesLastUpdateTimestamp.toNumber(),
+        tokenIncentivesIndex: data.tokenIncentivesIndex.toString(),
+        emissionEndTimestamp: data.emissionEndTimestamp.toNumber(),
+        rewardOracleAddress: "0x0000000000000000000000000000000000000000",
+        rewardPriceFeed: "0",
+        priceFeedDecimals: 0,
+        rewardTokenSymbol: "WBNB"
+      }],
     };
   }
 
@@ -330,6 +327,16 @@ export class UiIncentiveDataProvider
       rewardTokenDecimals: data.rewardTokenDecimals,
       tokenIncentivesUserIndex: data.tokenincentivesUserIndex.toString(),
       userUnclaimedRewards: data.userUnclaimedRewards.toString(),
+      userRewardsInformation: [{
+        rewardTokenAddress: data.rewardTokenAddress,
+        rewardTokenDecimals: data.rewardTokenDecimals,
+        tokenIncentivesUserIndex: data.tokenincentivesUserIndex.toString(),
+        userUnclaimedRewards: data.userUnclaimedRewards.toString(),
+        rewardOracleAddress: "0x0000000000000000000000000000000000000000",
+        rewardPriceFeed: "0",
+        priceFeedDecimals: 0,
+        rewardTokenSymbol: "WBNB"
+      }],
     };
   }
 }
